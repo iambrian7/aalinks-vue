@@ -27,7 +27,7 @@ export default {
       .then(function(res) {
    //           debugger;  
              // self.ameetings = res.data;  
-             console.log("data api= " + res.data)
+            // console.log("data api= " + res.data)
              debugger;
              self.meetings = res.data
             // $route.meetings.res.data

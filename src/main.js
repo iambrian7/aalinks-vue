@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 
 Vue.config.productionTip = false
-
+export const Bus = new Vue() // This empty Vue model will serve as our event bus.
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
