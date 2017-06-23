@@ -45,6 +45,7 @@ Object.keys(proxyTable).forEach(function (context) {
   if (typeof options === 'string') {
     options = { target: options }
   }
+   console.log( "proxy optons: " + JSON.stringify(options, null, 3))
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
