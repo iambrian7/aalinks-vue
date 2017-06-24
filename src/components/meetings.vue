@@ -61,7 +61,7 @@ export default {
     },
     addMarkers: function(){
       debugger;
-      Bus.$emit('eventFired',this.msg);
+     // Bus.$emit('eventFired',this.msg);
      // this.msg = 'I fired an event.'
     },
      daycut: function(m){
@@ -82,6 +82,11 @@ export default {
       if (unit === 'K') { dist = dist * 1.609344 };
       if (unit === 'N') { dist = dist * 0.8684 };
       return dist;
+    },
+    sendMarkers:function(newMeetings){
+      console.log(".......................emitting new meetings day filter= " + newMeetings.length)
+      var n =newMeetings;
+      Bus.$emit('eventFired',n);
     }
   },
   computed: {
@@ -90,7 +95,9 @@ export default {
       console.log("mile filter= " + firstcut.length)
     //  debugger;
        var newMeetings = firstcut.filter(this.daycut)
-        console.log("day filter= " + newMeetings.length)
+        
+        this.sendMarkers(newMeetings);
+        
      return newMeetings;
     }
   }
