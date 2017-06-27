@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    {{ apimessage }}
     <aalinks-nav></aalinks-nav>
 
     <router-view v-bind:meetings='meetings'></router-view>
@@ -23,12 +22,12 @@ export default {
   methods: {
     fetchMeetings(){
       var self = this;
-      axios.get("/api")
+      axios.get("http://localhost:8081/api")
       .then(function(res) {
    //           debugger;  
              // self.ameetings = res.data;  
             // console.log("data api= " + res.data)
-             debugger;
+           //  debugger;
              self.meetings = res.data
             // $route.meetings.res.data
         // res.data.forEach(function(a){
