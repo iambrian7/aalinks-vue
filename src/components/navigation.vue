@@ -4,6 +4,8 @@
     <ul>
     <li><router-link to="/">Home</router-link></li>
     <li><router-link to="/meetings">Meetings</router-link></li>
+     <li><router-link to="/addmeeting">New Meetings</router-link></li>
+      <li><router-link to="/meetinglist">Meeting List</router-link></li>
     </ul>
     </nav>
     </div>

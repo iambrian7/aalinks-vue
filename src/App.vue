@@ -16,7 +16,9 @@ export default {
    data () {
     return {
       apimessage: 'Welcome to Your Vue.js no server yet .............',
-      meetings: []
+      meetings: [],
+      meeting_list: {},
+      meeting_list_index: []
     }
   },
   methods: {
@@ -27,12 +29,20 @@ export default {
    //           debugger;  
              // self.ameetings = res.data;  
             // console.log("data api= " + res.data)
-           //  debugger;
+          //   debugger;
              self.meetings = res.data
             // $route.meetings.res.data
-        // res.data.forEach(function(a){
-        //   self.ameetings.push(a);
-        // })
+            for (var i=0; i<3; i++){
+              console.log("meeting " + i + " " + JSON.stringify(self.meetings[i], null, 3))
+            }
+        res.data.forEach(function(a){
+          self.meeting_list[a._id] = a;
+          self.meeting_list_index.push(a._id)
+        })
+          for (var i=0; i<3; i++){
+            var mIndex = self.meeting_list_index[i];
+              console.log("meeting_list " + i + " " + JSON.stringify(self.meeting_list[mIndex], null, 3))
+            }
     //    console.log(this.todos[0])
      //   console.log("todos count= " + this.todos.length)
       })
@@ -53,7 +63,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   
 }

@@ -58,10 +58,12 @@ export default {
              // delete markers
             // debugger;
             // always delete all markers
+            console.log("makeNewMarkers = " + locations)
             this.markers.forEach(function (m) {
                 m.setMap(null);
             })
             this.markers = [];
+            if (!locations) return; // no locations so remove all markers
             if (Object.keys(locations).length == 0) {
                 console.log("no locations to mark")
                 return;
@@ -105,13 +107,23 @@ export default {
         }// end of locations
        
          var self = this;
-         // must async this because the always goes into a loop if we don't
-     //   setTimeout(function(){
+         if (self.markers.length == 1){
+            self.map.setCenter(this.markers[0].getPosition());
+         } else {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < self.markers.length; i++) {
             bounds.extend(self.markers[i].getPosition());
             }
             self.map.fitBounds(bounds);
+         }
+          
+         // must async this because the always goes into a loop if we don't
+     //   setTimeout(function(){
+            // var bounds = new google.maps.LatLngBounds();
+            // for (var i = 0; i < self.markers.length; i++) {
+            // bounds.extend(self.markers[i].getPosition());
+            // }
+            // self.map.fitBounds(bounds);
       //  },100)
         },
    },

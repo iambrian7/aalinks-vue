@@ -3,6 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VeeValidate from 'vee-validate';
+
+
+import jQuery from 'jquery'
+
+global.jQuery = jQuery
+global.$ = jQuery
+let Bootstrap = require('bootstrap')
+import 'bootstrap/dist/css/bootstrap.css'
+Vue.use(VeeValidate);
 
 Vue.config.productionTip = false
 export const Bus = new Vue() // This empty Vue model will serve as our event bus.
