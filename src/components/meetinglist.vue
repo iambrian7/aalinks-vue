@@ -1,24 +1,16 @@
 <template>
   <div class="meetinglist">
-  <h1>{{ msg}}</h1>
-  <h3>Base meetings: {{meetings.length}}</h3>
-  <button @click='fixIndex'>Fix Index</button>
-  <label>Choose Day</label><input v-model="query" placeholder="edit me">
-  <div class="container">
-    <div class="my-List">
-         <!-- <div class="meeting-header" v-for="m in meetings.slice(0,3)">  -->
-      <div class="meeting-header" v-for="m in filteredIndex">
-        <div class="panel panel-primary">
-          <div class="panel-heading">  Name: {{meetingObj[m].name}}</div>
-            <div class="panel-body">
-               {{ meetingObj[m].address}} {{ meetingObj[m].day | dayname}} 
-              <!-- <pre>{{m}}</pre> -->
-            </div>
-        </div>
-      </div>
-    </div><!-- end my-list-->
-       <!-- <p v-for="m in filteredIndex">{{meetingObj[m].name}}</p>  -->
-  </div> <!-- end container -->
+
+  <!-- <div class="container"> -->
+    <ul>
+      <li
+        v-for="(a, index) in meetings" 
+        class='meeting-list-item' 
+        v-bind:data-key='a.name'
+        > {{ a.name }}
+          </li>
+    </ul>
+  <!-- </div> end container -->
   </div>
 </template>
 
@@ -59,7 +51,7 @@ export default {
         }
          
       })
-    //  debugger
+     debugger
       this.meetingIndex = indx;
       return this.meetingIndex;
     }
@@ -108,4 +100,7 @@ export default {
 }
 .meeting-header {background: #ccc;}
 p {background: #ccc;}
+.meetinglist ul {padding: 0;}
+.meeting-list-item { padding: 5px; border: 1px solid grey; margin: 5px;
+ background: #fff; text-align: left;  list-style: none;}
 </style>

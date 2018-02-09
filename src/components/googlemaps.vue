@@ -27,6 +27,43 @@ export default {
             center: {lat: 44.9169913, lng: -93.4435269},
             zoom: 13
             });
+            var self = this;
+
+            google.maps.event.addListener(self.map, 'click', function(event) {
+               // console.log("map clicked................... at : lnglat " + event.latlng)
+                var mapZoom = self.map.getZoom();
+                
+                var startLocation = event.latLng;
+               // console.log("zoom is " + mapZoom + " at " + startLocation)
+            //   debugger
+            //    var loc = {};
+
+            // loc[0] = {
+            //     location: 'hello location',
+            //     address: '',
+            //     city: '',
+            //     state: '',
+            //     postal_code: '',
+            //     loc : {
+            //         "type": "Point",
+            //         "coordinates": [
+            //         startLocation.lng(),
+            //         startLocation.lat()
+            //             ]
+            //         }
+            // }
+         //   self.locations = loc
+            self.$emit('clicked', startLocation)
+               // setTimeout(placeMarker, 600);
+            });
+
+            function placeMarker() {
+                if(mapZoom == self.map.getZoom()){
+                    new google.maps.Marker({position: location, map: self.map});
+                }
+            }
+
+
         },
         newMarkerContent:function(meetings){
             var content = "";

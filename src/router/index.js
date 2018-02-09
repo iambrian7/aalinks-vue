@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import Meetings from '@/components/meetings'
 import addMeeting from '@/components/addmeeting'
 import MeetingsList from '@/components/meetinglist'
+import TestResponsiveForm from '@/components/TestResponsiveForm'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/responsiveform',
+      name: 'test-reponsive-form',
+      component: TestResponsiveForm
     },
      {
       path: '/addmeeting',

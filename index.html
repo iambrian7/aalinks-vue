@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>aalinks</title>
+    <link href='https://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
     <style>
       
     /*#app {
@@ -23,6 +26,7 @@
   min-width: 50%;
   min-height: 50%;
 }*/
+body, document { height: 100vh;}
 #bg {
   position: fixed; 
   top: 0; 
@@ -30,15 +34,69 @@
 	z-index: -1;
   /* Preserve aspet ratio */
   min-width: 100%;
-  min-height: 100%;
+  /* min-height: 100%; */
 }
+.parallax {
+    /* The image used */
+    background-image: url("/static/NorthCarolinaSunrise.jpg");
+
+    /* Set a specific height */
+    /* min-height: 100vh;  */
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.image-title1 {
+    font-size: 35px;
+    position: absolute;
+    top: 500px;
+    left: 150px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid white;
+}
+.image-title2 {
+    font-size:35px;
+    position: absolute;
+    top: 620px;
+    left: 252px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid white;
+}
+
+.image-title1,.image-title2{
+    font: 400 130px/0.8 'Great Vibes', Helvetica, sans-serif;
+    font-size: 75px;
+    color: #fff;
+    text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
+}
+
     </style>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAoI7av5H3SWALDdJcwDBcRFS0-SAhP5vo"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js"></script>
   </head>
-  <body>
-    <img src="/static/NorthCarolinaSunrise.jpg" alt="" id="bg">
-    <div id="app"></div>
+  <body class="parallax">
+    <!-- <img src="/static/NorthCarolinaSunrise.jpg" alt="" id="bg"> -->
+    <div id="app">
+      <h1>Hello...............</h1>
+    </div>
+    <!-- <script type="text/javascript">
+      window.onload = function () {
+          var script = document.createElement("script");
+          script.type = "text/javascript";
+          script.src = "http://jsonip.appspot.com/?callback=DisplayIP";
+          document.getElementsByTagName("head")[0].appendChild(script);
+      };
+      function DisplayIP(response) {
+        //  document.getElementById("ipaddress").innerHTML = "Your IP Address is " + response.ip;
+          console.log("Your IP Address is " + response.ip)
+      }
+  </script> -->
+    
     <!-- built files will be auto injected -->
   </body>
 </html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Nav check</title>
+</head>
+<body>
+    <h1>Nav check</h1>
+    <script>
+     if ("geolocation" in navigator) {
+          /* geolocation is available */
+          console.log("geoLocate success......")
+        //  this.fetchMeetings();
+        } else {
+          /* geolocation IS NOT available */
+          console.log("failed..........")
+           // this.fetchMeetings();
+        }
+    </script>
+</body>
+</html>

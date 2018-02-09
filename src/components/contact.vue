@@ -10,22 +10,6 @@
 <!-- Form Name -->
 <legend>Contact Us Today!</legend>
 
-<!-- Text input-->
-<div class="form-group">
-    <label class="control-label col-md-2 col-sm-4" for="firstName">First Name:
-          <span><i class="glyphicon glyphicon-user"></i></span>
-    </label>
-    <!-- <div class="col-md-5 col-sm-8" v-bind:class="{ 'has-error' : errors.has('FirstName') }"> -->
-        <!-- <div class="input-group"> -->
-         <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
-    <div v-bind:class="{ 'has-error' : errors.has('FirstName') }">
- 
-        <input name="FirstName" v-validate="'required|alpha|min:3'" class="form-control" type="text" id="firstName" placeholder="" v-bind:class="{ 'input': true, 'has-error': errors.has('FirstName') }" >
-     
-        <span v-show="errors.has('FirstName')" class="help-block error text-danger">{{ errors.first('FirstName') }}</span>
-     </div>
-    <!-- </div> -->
-</div>
   <!-- this is the only form input that works with vee-validate  !!!!!!!!!!!!!!!!! -->
 <div class="form-group">
   <label class="col-md-4 control-label">First Name</label>  
@@ -49,18 +33,16 @@
     </div>
   </div>
 </div>
-<!-- Text input-->
 <div class="form-group">
-    <label class="label" for="email">Email</label>
-    <p :class="{ 'control': true }">
+    <label class="col-md-4 control-label" >Email</label> 
+    <div class="col-md-4 inputGroupContainer">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
         <input v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="text" placeholder="Email">
         <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
-    </p>
-
-
-   
+      </div>
+    </div>
 </div>
-
 
 <!-- Text input-->
        
@@ -93,7 +75,12 @@
     <div class="col-md-4 inputGroupContainer">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
-  <input name="city" placeholder="city" class="form-control"  type="text">
+
+        <input v-validate:name="'required|alpha_spaces'"  :class="{'input': true, 'is-danger': errors.has('city') }
+        " name="city" type="text" placeholder="City" v-model="info.city">
+        <span v-show="errors.has('city')" class="help is-danger">{{ errors.first('city') }}</span>
+
+        <!-- <input name="city" placeholder="city" class="form-control"  type="text" v-model="info.city"> -->
     </div>
   </div>
 </div>
@@ -175,45 +162,6 @@
 </div>
 </div>
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label">Website or domain name</label>  
-   <div class="col-md-4 inputGroupContainer">
-    <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-  <input name="website" placeholder="Website or domain name" class="form-control" type="text">
-    </div>
-  </div>
-</div>
-
-<!-- radio checks -->
- <div class="form-group">
-                        <label class="col-md-4 control-label">Do you have hosting?</label>
-                        <div class="col-md-4">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="hosting" value="yes" /> Yes
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="hosting" value="no" /> No
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-<!-- Text area -->
-  
-<div class="form-group">
-  <label class="col-md-4 control-label">Project Description</label>
-    <div class="col-md-4 inputGroupContainer">
-    <div class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-        	<textarea class="form-control" name="comment" placeholder="Project Description"></textarea>
-  </div>
-  </div>
-</div>
 
 <!-- Success message -->
 <div class="alert alert-success" role="alert" id="success_message">Success <i class="glyphicon glyphicon-thumbs-up"></i> Thanks for contacting us, we will get back to you shortly.</div>
@@ -240,6 +188,7 @@
 
 export default {
   name: 'contact',
+  props: ["info"],
   data () {
     return {
       msg: 'Add a contact',

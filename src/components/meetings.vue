@@ -1,19 +1,17 @@
 <template>
   <div class="meetings">
     <div class="aaflex-tools">
-      <div class="aaflex-search">
-       <button>Search</button>  <input type="text">
-       
-     </div>
-     <button @click="options = !options">Options</button>
-    
-      <div class="aaflex-tools-miles">
-<button @click="mileMax = 2" :class="{ active: mileMax == 2 }">Mile 2</button>
-        <button @click="mileMax = 5" :class="{ active: mileMax == 5 }">Mile 5</button>
-        <button @click="mileMax = 10" :class="{ active: mileMax == 10 }">Mile 10</button>
-        <button @click="mileMax = 20" :class="{ active: mileMax == 20 }">Mile 20</button>
+      <div class="aaflex-search meeting-tools-item">
+        <button>Search</button>  <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
       </div>
-      <div class="aaflex-tools-days">
+      <button @click="options = !options" class=" meeting-tools-item">Options</button>
+      <div class="aaflex-tools-miles meeting-tools-item">
+          <button @click="mileMax = 2" :class="{ active: mileMax == 2 }">Mile 2</button>
+          <button @click="mileMax = 5" :class="{ active: mileMax == 5 }">Mile 5</button>
+          <button @click="mileMax = 10" :class="{ active: mileMax == 10 }">Mile 10</button>
+          <button @click="mileMax = 20" :class="{ active: mileMax == 20 }">Mile 20</button>
+      </div>
+      <div class="aaflex-tools-days meeting-tools-item">
          <button @click="day=0" :class="{ active: day == 0 }">Sun</button>
           <button @click="day=1" :class="{ active: day == 1 }">Mon</button>
           <button @click="day=2" :class="{ active: day == 2 }">Tue</button>
@@ -23,9 +21,7 @@
           <button @click="day=6" :class="{ active: day == 6 }">Sat</button>
           <button @click="day=7" :class="{ active: day == 7 }">All</button>
       </div>
-   
-    </div>
-     <div class="aaflex-options" v-if="options">
+     <div class="aaflex-options meeting-tools-item" v-if="options">
        <input type="radio" id="all" value="" v-model="picked"><label for="all">All</label>
        <input type="radio" id="both" value="MW" v-model="picked"><label for="both">Men/Women</label>
        <input type="radio" id="one" value="M" v-model="picked"><label for="one">Men</label>
@@ -37,52 +33,117 @@
           <option>C</option>
         </select>
      </div>
-   <div class="aaflex-container">
      
-   <div class="aaflex-list item">
-    <p>Meetings found: {{ filteredMeetings.length }}</p>
+    </div><!-- end tools -->
+    <div class="meeting-list-info">
+        <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
+      </div> 
+   <div class="aaflex-container">
     
-    
-   <ol>
-            <li
-             v-for="(a, index) in filteredMeetings" 
-             class='acct-todo-item' 
-              v-bind:data-key='a.name'
-              > {{ a.name }}
-               <!--<router-link to="{{a.slug"}}>{{ a.name }}</router-link>-->
-               </li>
-         </ol>
-   </div>
-   <div class="aaflex-map item">
-     <google-map :locations="newlocations"></google-map>
-   </div>
+      <div class="aaflex-list item">
+        <meeting-list :meetings="filteredMeetings"></meeting-list>
+        <!-- <p>Meetings found: {{ filteredMeetings.length }}</p>
+        <ol>
+          <li
+            v-for="(a, index) in filteredMeetings" 
+            class='acct-todo-item' 
+            v-bind:data-key='a.name'
+            > {{ a.name }}
+              </li>
+        </ol> -->
+
+      </div>
+      <div class="aaflex-map item">
+        <google-map :locations="newlocations"></google-map>
+      </div>
    </div>
     
   </div>
 </template>
 
 <script>
+  // geolocate function
+  function aalinksGeolocateLatLng(latlng,callback){
+var geocoder = new google.maps.Geocoder();
+//debugger
+    var obj = {};
+    geocoder.geocode({'location': latlng}, function(results, status) {
+  //  geocoder.geocode({ 'address': search }, function (results, status) {
+              if (status === google.maps.GeocoderStatus.OK) {
+                  console.log(results[0].geometry.location.lat());
+                //   Aalinks.coords = position.coords;
+                obj.lat = results[0].geometry.location.lat()
+                obj.lng = results[0].geometry.location.lng()
+      
+                obj.formatted_address = results[0].formatted_address;
+                  console.log('load map at ' +  obj.formatted_address);
+                  callback(obj)
+                return obj;
+              }
+              return null;
+          }); // end of geocode 
+
+}
+
+
+function aalinksGeolocate(search,callback){
+var geocoder = new google.maps.Geocoder();
+    var obj = {};
+    geocoder.geocode({ 'address': search }, function (results, status) {
+              if (status === google.maps.GeocoderStatus.OK) {
+                  console.log(results[0].geometry.location.lat());
+                //   Aalinks.coords = position.coords;
+                obj.lat = results[0].geometry.location.lat()
+                obj.lng = results[0].geometry.location.lng()
+      
+                obj.formatted_address = results[0].formatted_address;
+                  console.log('load map at ' +  obj.formatted_address);
+                  callback(obj)
+                return obj;
+              }
+              return null;
+          }); // end of geocode 
+
+}
+
+
+//var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+    //    geocoder.geocode({'location': latlng}, function(results, status) {
+
+
   import GoogleMap from '@/components/googlemaps'
+  import MeetingList from '@/components/meetinglist'
+  import ToolsTest from '@/components/tooltest'
     import { Bus } from '../main'
 export default {
   name: 'meetings',
-  props: ["meetings"],
+  props: ["meetings","lat","lng"],
   components: {
-    "google-map": GoogleMap
+    "google-map": GoogleMap,
+    "tools-test": ToolsTest,
+    "meeting-list": MeetingList
   },
   data () {
     return {
       msg: 'Welcome to meetings',
+      baselocation: "",
+      meetingOptions: {
+        picked: "", // default to all meetings
+        mileMax: 2,
+        day: 0,
+        selected: '',
+      },
       options: false,
       picked: "", // default to all meetings
       mileMax: 2,
-      day: 0,
+      day: new Date().getDay(),
       selected: '',
-       lat: 44.9169,
-      lng: -93.4450,
+   //    lat: 44.9169,
+    //  lng: -93.4450,
       home: {lat:44.9270729,lng:-93.4479148},
       isActive: true,
       allMeetings: false,
+      searchInput: '',
       newlocations: {}
     }
   },
@@ -108,7 +169,44 @@ export default {
       if (unit === 'K') { dist = dist * 1.609344 };
       if (unit === 'N') { dist = dist * 0.8684 };
       return dist;
-    }
+    },
+    geolocateCenter(){
+               //  var el = document.querySelector(".search-input-error")
+               console.log("searching.........." + this.searchInput);
+             //  return;
+
+
+                if (Number.isInteger(this.searchInput)*1) {
+                    console.log("address is not valid...........")
+                   
+                   // el.classList.remove("hide")
+                    return;
+                }
+              //  el.classList.add("hide")
+                var self = this;
+                var aalocated = aalinksGeolocate(self.searchInput,function(data){
+                    console.log("uitil located at: " + JSON.stringify(data))
+                   self.lat = data.lat;
+                   self.lng = data.lng;
+                    // console.log("entered: " + self.searchInput.value)
+                    // console.log('get my location called');
+                    self.searchInput = "";
+                  //  self.searchInput.placeholder = "enter new home location..."
+                    self.baselocation = data.formatted_address;
+                   // document.querySelector("holy-header span").innerHTML = data.formatted_address;
+                   // self.getMongoMeetings();// this will dispatch the new meetings (this.displaynewmeetings)
+                })
+            },
+            getAddressFromLatLng: function(){
+              var self = this
+               // geocoder.geocode({'location': latlng}, function(results, status) {
+              var latlng = {lat: parseFloat(this.lat), lng: parseFloat(this.lng)};
+                 
+              aalinksGeolocateLatLng(latlng,function(data){
+                    console.log("latlng located at: " + JSON.stringify(data.formatted_address))
+                    self.baselocation = data.formatted_address;
+              });
+            }
   },
   computed: {
     filteredMeetings: function(){
@@ -172,8 +270,13 @@ export default {
         
      return newMeetings;
     },
-
-  }
+  },
+  created(){
+      console.log("created meetings..........")
+     // debugger
+      this.getAddressFromLatLng();
+    //  this.mileMax = 40;
+    }
 }
 </script>
 
@@ -192,7 +295,10 @@ padding: 0; margin: 0;}
 .aaflex-map { flex:1 0 auto; background: #6cffbc;}
 .item {height: 90vh;}
 .active {background: #6cffbc;}
-
+/* .meeting-tools-item { min-width: 800px;} */
+.meeting-list-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
+    background: #6cffbc; border-radius: 5px; font-size: 16px;}
+.meeting-list-info span {}
  #accts-todo-container { display: flex; justify-content: space-around;}
         .accts-list { padding: 10px; border: 1px solid grey; flex: 1; background: #666;}
         .accts-list h3 {border-bottom: 1px solid red; margin: 5px; background: #aaa; text-align: center;}

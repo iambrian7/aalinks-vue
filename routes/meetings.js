@@ -11,6 +11,8 @@ router.get('/', function(req, res, next) {
  // res.send("get meetings...............")
  console.log("api getting meetings....")
   var miles = req.query.miles;
+  var lat = req.query.lat;
+  var lng = req.query.lng;
   if (miles == undefined) {
     miles = 3000;
     //res.redirect('/');
@@ -20,7 +22,7 @@ router.get('/', function(req, res, next) {
   
   
  // miles = 9000;
-  console.log("got miles= " + miles)
+  console.log("got miles= " + miles + " lat=" + lat + " lng=" + lng)
   var limit = 9000;//3000;//req.query.limit || 10;
   var maxDistance = miles * 1600;// 3963.2;//req.query.distance || 8;
   var coords = [];
