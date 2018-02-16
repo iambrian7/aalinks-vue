@@ -52,6 +52,10 @@
       
       <!-- Add "scoped" attribute to limit CSS to this component only -->
       <style>
-     
+      .new-vee form {
+          background: #aaa;
+          padding: 20px;
+          margin: 5px 20px;
+      }
       </style>
       

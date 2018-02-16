@@ -19,7 +19,6 @@
                     <!-- <span v-show="errors.has('name')" class=" error text-danger">{{ errors.first('name') }}</span> -->
                 </div>
             </div>
-
             <!-- day group  -->
             <div class="form-group">
                 <label class="control-label">Day</label>  

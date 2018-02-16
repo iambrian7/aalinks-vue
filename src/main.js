@@ -13,7 +13,10 @@ global.$ = jQuery
 let Bootstrap = require('bootstrap')
 import 'bootstrap/dist/css/bootstrap.css'
 Vue.use(VeeValidate);
-
+ // register
+ Vue.component('my-component', {
+  template: '<div>A custom component!</div>'
+})
 Vue.config.productionTip = false
 export const Bus = new Vue() // This empty Vue model will serve as our event bus.
 /* eslint-disable no-new */
