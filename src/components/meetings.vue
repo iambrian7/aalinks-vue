@@ -4,7 +4,22 @@
       <div class="aaflex-search meeting-tools-item">
         <button>Search</button>  <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
       </div>
-      <button @click="options = !options" class=" meeting-tools-item">Options</button>
+      <div class="options-container">
+          <button @click="options = !options" class=" meeting-tools-item">Options</button>
+                <!-- end options-container -->
+                 <div class="aaflex-options meeting-tools-item" v-if="options">
+          <input type="radio" id="all" value="" v-model="picked"><label for="all">All</label>
+          <input type="radio" id="both" value="MW" v-model="picked"><label for="both">Men/Women</label>
+          <input type="radio" id="one" value="M" v-model="picked"><label for="one">Men</label>
+          <input type="radio" id="two" value="W" v-model="picked"><label for="two">Women</label>
+            <select v-model="selected">
+              <option disabled value="">Please select one</option>
+              <option>A</option>
+              <option>B</option>
+              <option>C</option>
+            </select>
+        </div>
+      </div>
       <div class="aaflex-tools-miles meeting-tools-item">
           <button @click="mileMax = 2" :class="{ active: mileMax == 2 }">Mile 2</button>
           <button @click="mileMax = 5" :class="{ active: mileMax == 5 }">Mile 5</button>
@@ -12,7 +27,7 @@
           <button @click="mileMax = 20" :class="{ active: mileMax == 20 }">Mile 20</button>
       </div>
       <div class="aaflex-tools-days meeting-tools-item">
-         <button @click="day=0" :class="{ active: day == 0 }">Sun</button>
+        <button @click="day=0" :class="{ active: day == 0 }">Sun</button>
           <button @click="day=1" :class="{ active: day == 1 }">Mon</button>
           <button @click="day=2" :class="{ active: day == 2 }">Tue</button>
           <button @click="day=3" :class="{ active: day == 3 }">Wed</button>
@@ -21,39 +36,19 @@
           <button @click="day=6" :class="{ active: day == 6 }">Sat</button>
           <button @click="day=7" :class="{ active: day == 7 }">All</button>
       </div>
-     <div class="aaflex-options meeting-tools-item" v-if="options">
-       <input type="radio" id="all" value="" v-model="picked"><label for="all">All</label>
-       <input type="radio" id="both" value="MW" v-model="picked"><label for="both">Men/Women</label>
-       <input type="radio" id="one" value="M" v-model="picked"><label for="one">Men</label>
-       <input type="radio" id="two" value="W" v-model="picked"><label for="two">Women</label>
-        <select v-model="selected">
-          <option disabled value="">Please select one</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-        </select>
-     </div>
-     
+
+
+       
+
     </div><!-- end tools -->
     <div class="meeting-list-info">
         <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
-      </div> 
-   <div class="aaflex-container">
-    
-      <div class="aaflex-list item">
+    </div>
+    <div class="aaflex-container">
+      <div class="aaflex-list">
         <meeting-list :meetings="filteredMeetings"></meeting-list>
-        <!-- <p>Meetings found: {{ filteredMeetings.length }}</p>
-        <ol>
-          <li
-            v-for="(a, index) in filteredMeetings" 
-            class='acct-todo-item' 
-            v-bind:data-key='a.name'
-            > {{ a.name }}
-              </li>
-        </ol> -->
-
       </div>
-      <div class="aaflex-map item">
+      <div class="aaflex-map">
         <google-map :locations="newlocations"></google-map>
       </div>
    </div>
@@ -149,6 +144,8 @@ export default {
   },
   methods: {
     mileLimit: function(m){
+      console.log("mileLimit-lat:" + this.lat + " lng:" + this.lng)
+      console.log("meeting  -lat:" + m.loc.coordinates[1] + " lng:" + m.loc.coordinates[0])
       return (this.mileMax > this.distance(this.lat,this.lng,m.loc.coordinates[1],m.loc.coordinates[0])) 
     },
     daycut: function(m){
@@ -168,6 +165,7 @@ export default {
       dist = dist * 60 * 1.1515;
       if (unit === 'K') { dist = dist * 1.609344 };
       if (unit === 'N') { dist = dist * 0.8684 };
+
       return dist;
     },
     geolocateCenter(){
@@ -211,7 +209,7 @@ export default {
   computed: {
     filteredMeetings: function(){
     var self = this;
-
+// debugger
        var newMeetings = this.meetings.filter(function(m){
            return ((self.mileLimit(m)) &&
                     (self.day == 7 || self.day == m.day) &&
@@ -284,26 +282,62 @@ export default {
 <style scoped>
 .meetings { width: 100wh; height: 100vh; background: #ccc;
 padding: 0; margin: 0;}
-.aaflex-container {display: flex; align-content: flex-start; width: 100%}
-.aaflex-options { width: 100%; padding: 5px; background:  #388abd;}
-.aaflex-tools {display: flex; justify-content: space-around;padding: 10px;
-    background: #388abd;}
-    .aaflex-search {}
-.aaflex-tools-miles {flex: 2}
-.aaflex-tools-days {flex: 2}
-.aaflex-list { flex: 0 0 300px; background: yellow; overflow: scroll;}
-.aaflex-map { flex:1 0 auto; background: #6cffbc;}
+/* .aaflex-container {display: flex; align-content: flex-start; width: 100%; flex-direction: column;} */
+.aaflex-container {
+  display: grid; 
+  grid-template-columns: 1fr 3fr;
+  grid-auto-rows: minmax(200px, auto);
+  height: 800px;
+  }
+.aaflex-options { width: 100%; padding: 5px; background:  ##afdffc;}
+
+.aaflex-tools {display: flex; justify-content: space-evenly; align-items: baseline; padding: 10px;
+    background: #388abd; width: 100%; font-size: 1.2vw;}
+.aaflex-search {}
+.aaflex-tools-miles,
+.aaflex-tools-days {flex: 2; margin: 0 20px; padding: 20px;}
+
+
+/* .aaflex-list { flex: 1 1 auto; background: yellow; overflow: scroll;} */
+.aaflex-list {background: yellow; overflow: scroll;}
+/* .aaflex-map { flex:1 1 auto; background: #6cffbc;} */
 .item {height: 90vh;}
 .active {background: #6cffbc;}
 /* .meeting-tools-item { min-width: 800px;} */
 .meeting-list-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
-    background: #6cffbc; border-radius: 5px; font-size: 16px;}
-.meeting-list-info span {}
- #accts-todo-container { display: flex; justify-content: space-around;}
-        .accts-list { padding: 10px; border: 1px solid grey; flex: 1; background: #666;}
-        .accts-list h3 {border-bottom: 1px solid red; margin: 5px; background: #aaa; text-align: center;}
-        .acct-todo-item { padding: 5px; border: 1px solid grey; margin: 5px; background: #fff; text-align: left;}
-        .accts-todo-header {padding: 5px; font-size: 2.0em; background: #ddd; display: flex;}
-        #accts-todo-date {padding: 5px; font-size: 0.6em; flex: 0 0 200px; color: red;}
-        .due {background:#fd9d9d;}
+    background: #6cffbc; border-radius: 5px; font-size: 2em; padding: 10px;}
+/* .meeting-list-info span {} */
+ /* #accts-todo-container { display: flex; justify-content: space-around;} */
+.accts-list { padding: 10px; border: 1px solid grey; background: #666; max-height: 800px; }
+/* .accts-list { padding: 10px; border: 1px solid grey; flex: 1; background: #666;} */
+.accts-list h3 {border-bottom: 1px solid red; margin: 5px; background: #aaa; text-align: center;}
+/* .acct-todo-item { padding: 5px; border: 1px solid grey; margin: 5px; background: #fff; text-align: left;}
+.accts-todo-header {padding: 5px; font-size: 2.0em; background: #ddd; display: flex;}
+#accts-todo-date {padding: 5px; font-size: 0.6em; flex: 0 0 200px; color: red;} */
+.hide {display: none;}
+/* .due {background:#fd9dpx9d;} */
+ .aaflex-map{ height: 800px; max-height: 800px;}
+/* .meetinglist{height: 900px;} */
+@media (max-width: 1200px) {
+  .aaflex-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 400px 1fr;
+    /* height: 400px; */
+          
+  }
+   .aaflex-tools {
+     background: hsl(24, 100%, 59%);
+     flex-direction: column;
+     padding: 10px; font-size: 14px;
+      }
+}
+@media (min-width: 600px) { 
+  .aaflex-tools {background: #ffd86c;
+   
+      }
+}
+@media (min-width: 1200px) {
+  .aaflex-tools {background: #6cffbc}
+}
+    /* end media query for large screens */
 </style>

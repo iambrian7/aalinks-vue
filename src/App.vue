@@ -134,8 +134,9 @@ export default {
             },
     fetchMeetings(){
       var self = this;
-    //  debugger
-      axios.get("http://localhost:8081/api")
+      debugger
+      axios.get("https://moonstrider.com/meetings/?miles=40")
+      // axios.get("http://localhost:8081/api")
       .then(function(res) {
    //           debugger;  
              // self.ameetings = res.data;  
@@ -164,7 +165,7 @@ export default {
   },
   created: function(){
     
-
+debugger
     console.log("app.vue created................")
     //this.fetchMeetings();
     //this.geoLocate();
@@ -186,5 +187,7 @@ export default {
   color: #2c3e50;
   
 }
-
+* {
+  box-sizing: border-box;
+}
 </style>

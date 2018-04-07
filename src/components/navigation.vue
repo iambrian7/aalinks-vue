@@ -1,21 +1,15 @@
 <template>
-  <div class="navigation">
-      <nav>
-          <ul>
+<div class="navigation">
+    <nav>
+        <ul>
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/meetings">Meetings</router-link></li>
-           <li><router-link to="/addmeeting">New Meetings</router-link></li>
-            <li><router-link to="/meetinglist">Meeting List</router-link></li>
-             <li><router-link to="/responsiveform">Responsive Form</router-link></li>
-          </ul>
-          </nav>
-    
-    <nav>
-    <ul>
-   
-    </ul>
+          <li><router-link to="/addmeeting">New Meetings</router-link></li>
+          <li><router-link to="/meetinglist">Meeting List</router-link></li>
+          <li><router-link to="/responsiveform">Responsive Form</router-link></li>
+        </ul>
     </nav>
-    </div>
+</div>
 </template>
 
 <script>

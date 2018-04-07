@@ -180,7 +180,7 @@ export default {
 
 </script>
 <style>
-    #googlemaps {width: 100%; height: 600px;}    
+    #googlemaps {width: 100%; height: 100%;}    
     #my-map {
         height: 100%; width: 100%;
         }
