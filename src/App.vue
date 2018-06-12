@@ -134,9 +134,9 @@ export default {
             },
     fetchMeetings(){
       var self = this;
-      debugger
-      axios.get("https://moonstrider.com/meetings/?miles=40")
-      // axios.get("http://localhost:8081/api")
+     // debugger
+     // axios.get("https://moonstrider.com/meetings/?miles=40")
+       axios.get("http://localhost:8086/api")
       .then(function(res) {
    //           debugger;  
              // self.ameetings = res.data;  

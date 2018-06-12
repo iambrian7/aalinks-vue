@@ -20,6 +20,15 @@
             </select>
         </div>
       </div>
+
+
+       
+
+    </div><!-- end tools -->
+    <div class="meeting-list-info">
+        <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
+    </div>
+    <div class="aaflex-miles-days">
       <div class="aaflex-tools-miles meeting-tools-item">
           <button @click="mileMax = 2" :class="{ active: mileMax == 2 }">Mile 2</button>
           <button @click="mileMax = 5" :class="{ active: mileMax == 5 }">Mile 5</button>
@@ -35,15 +44,8 @@
           <button @click="day=5" :class="{ active: day == 5 }">Fri</button>
           <button @click="day=6" :class="{ active: day == 6 }">Sat</button>
           <button @click="day=7" :class="{ active: day == 7 }">All</button>
-      </div>
-
-
-       
-
-    </div><!-- end tools -->
-    <div class="meeting-list-info">
-        <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
-    </div>
+      </div>     
+     </div><!-- end of miles days -->
     <div class="aaflex-container">
       <div class="aaflex-list">
         <meeting-list :meetings="filteredMeetings"></meeting-list>
@@ -144,8 +146,8 @@ export default {
   },
   methods: {
     mileLimit: function(m){
-      console.log("mileLimit-lat:" + this.lat + " lng:" + this.lng)
-      console.log("meeting  -lat:" + m.loc.coordinates[1] + " lng:" + m.loc.coordinates[0])
+     // console.log("mileLimit-lat:" + this.lat + " lng:" + this.lng)
+     // console.log("meeting  -lat:" + m.loc.coordinates[1] + " lng:" + m.loc.coordinates[0])
       return (this.mileMax > this.distance(this.lat,this.lng,m.loc.coordinates[1],m.loc.coordinates[0])) 
     },
     daycut: function(m){
@@ -292,10 +294,22 @@ padding: 0; margin: 0;}
 .aaflex-options { width: 100%; padding: 5px; background:  ##afdffc;}
 
 .aaflex-tools {display: flex; justify-content: space-evenly; align-items: baseline; padding: 10px;
-    background: #388abd; width: 100%; font-size: 1.2vw;}
+    background: #388abd; width: 100%; font-size: 1.0em;}
 .aaflex-search {}
-.aaflex-tools-miles,
-.aaflex-tools-days {flex: 2; margin: 0 20px; padding: 20px;}
+.aaflex-miles-days{
+  display: flex;
+  flex-direction: column;
+}
+.aaflex-tools-miles{
+  display: flex;
+}
+.aaflex-tools-days {
+  display: flex;
+}
+.aaflex-tools-miles button,
+.aaflex-tools-days button {
+  width: 80px; margin-bottom: 3px;
+  }
 
 
 /* .aaflex-list { flex: 1 1 auto; background: yellow; overflow: scroll;} */
@@ -305,7 +319,7 @@ padding: 0; margin: 0;}
 .active {background: #6cffbc;}
 /* .meeting-tools-item { min-width: 800px;} */
 .meeting-list-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
-    background: #6cffbc; border-radius: 5px; font-size: 2em; padding: 10px;}
+    background: #6cffbc; border-radius: 5px; font-size: 1.0em; padding: 10px;}
 /* .meeting-list-info span {} */
  /* #accts-todo-container { display: flex; justify-content: space-around;} */
 .accts-list { padding: 10px; border: 1px solid grey; background: #666; max-height: 800px; }
@@ -318,20 +332,24 @@ padding: 0; margin: 0;}
 /* .due {background:#fd9dpx9d;} */
  .aaflex-map{ height: 800px; max-height: 800px;}
 /* .meetinglist{height: 900px;} */
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   .aaflex-container {
     grid-template-columns: 1fr;
     grid-template-rows: 400px 1fr;
     /* height: 400px; */
           
-  }
+ /* }
    .aaflex-tools {
      background: hsl(24, 100%, 59%);
      flex-direction: column;
      padding: 10px; font-size: 14px;
       }
-}
-@media (min-width: 600px) { 
+} */
+@media (min-width: 900px) { 
+  .aaflex-miles-days{
+    flex-direction: row;
+    justify-content: space-around;
+  }
   .aaflex-tools {background: #ffd86c;
    
       }
