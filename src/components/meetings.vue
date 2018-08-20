@@ -114,7 +114,7 @@ var geocoder = new google.maps.Geocoder();
     import { Bus } from '../main'
 export default {
   name: 'meetings',
-  props: ["meetings","lat","lng"],
+ // props: ["meetings","lat","lng"],
   components: {
     "google-map": GoogleMap,
     "tools-test": ToolsTest,
@@ -143,6 +143,18 @@ export default {
       searchInput: '',
       newlocations: {}
     }
+  },
+  watch:{
+    day: function (val) {
+      this.$store.state.filters.day = val
+    },
+    mileMax: function (val) {
+      this.$store.state.filters.mileMax = val
+    },
+    picked: function (val) {
+      this.$store.state.filters.picked = val
+    },
+  
   },
   methods: {
     mileLimit: function(m){
@@ -188,6 +200,9 @@ export default {
                     console.log("uitil located at: " + JSON.stringify(data))
                    self.lat = data.lat;
                    self.lng = data.lng;
+                   self.$store.state.filters.lat = data.lat
+                   self.$store.state.filters.lng = data.lng
+                   debugger
                     // console.log("entered: " + self.searchInput.value)
                     // console.log('get my location called');
                     self.searchInput = "";
@@ -199,10 +214,14 @@ export default {
             },
             getAddressFromLatLng: function(){
               var self = this
+              var lat = this.$store.state.filters.lat
+              var lng = this.$store.state.filters.lng
                // geocoder.geocode({'location': latlng}, function(results, status) {
-              var latlng = {lat: parseFloat(this.lat), lng: parseFloat(this.lng)};
+                 console.log("latlng located at: " + lat + ':' + lng)
+              var latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
                  
               aalinksGeolocateLatLng(latlng,function(data){
+                debugger
                     console.log("latlng located at: " + JSON.stringify(data.formatted_address))
                     self.baselocation = data.formatted_address;
               });
@@ -211,13 +230,21 @@ export default {
   computed: {
     filteredMeetings: function(){
     var self = this;
-// debugger
-       var newMeetings = this.meetings.filter(function(m){
-           return ((self.mileLimit(m)) &&
-                    (self.day == 7 || self.day == m.day) &&
-                   (!self.picked || m.types.includes(self.picked))
-                    )
-        })
+    //  var newMeetings = this.meetings.filter(function(m){
+      //      return ((self.mileLimit(m)) &&
+      //               (self.day == 7 || self.day == m.day) &&
+      //              (!self.picked || m.types.includes(self.picked))
+      //               )
+      //   })
+      
+    //  debugger
+      var newMeetings = this.$store.getters.getFilteredMeetings
+      // var newMeetings = this.$store.getters.getFilteredMeetings({
+      //   day: this.day,
+      //   picked: '',
+      //   mileMax: this.mileMax,
+      //   home: {lat:44.9270729,lng:-93.4479148}
+      // })  
       newMeetings.sort(function (a, b) {
         // ******************** first sort days
         var nameA = a.day;
@@ -287,7 +314,7 @@ padding: 0; margin: 0;}
 /* .aaflex-container {display: flex; align-content: flex-start; width: 100%; flex-direction: column;} */
 .aaflex-container {
   display: grid; 
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: minmax(200px, auto);
   height: 800px;
   }
@@ -345,17 +372,14 @@ padding: 0; margin: 0;}
      padding: 10px; font-size: 14px;
       }
 } */
-@media (min-width: 900px) { 
-  .aaflex-miles-days{
-    flex-direction: row;
-    justify-content: space-around;
+@media (min-height: 680px) {
   }
-  .aaflex-tools {background: #ffd86c;
-   
-      }
-}
-@media (min-width: 1200px) {
-  .aaflex-tools {background: #6cffbc}
+@media (min-width: 900px) { 
+  .aaflex-container {
+  grid-template-columns: 1fr 3fr;
+  grid-auto-rows: minmax(200px, auto);
+  height: 800px;
+  }
 }
     /* end media query for large screens */
 </style>

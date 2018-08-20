@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Meetings from '@/components/meetings'
+import addSimpleMeeting from '@/components/addSimpleMeeting'
 import addMeeting from '@/components/addmeeting'
 import MeetingsList from '@/components/meetinglist'
 import TestResponsiveForm from '@/components/TestResponsiveForm'
@@ -24,7 +25,8 @@ export default new Router({
      {
       path: '/addmeeting',
       name: 'add-meeting',
-      component: addMeeting
+     component: addSimpleMeeting
+    //  component: addMeeting
     },
      {
       path: '/meetings',

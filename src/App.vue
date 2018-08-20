@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <aalinks-nav></aalinks-nav>
-    <button v-if="!locationFound" @click="mylocation">Find your location</button>
-    <keep-alive include="addmeeting">
+    <!-- <button v-if="!locationFound" @click="mylocation">Find your location</button> -->
+    <!-- <keep-alive include="addmeeting">
        <router-view v-bind:meetings='meetings' v-bind:lat='lat' v-bind:lng='lng'></router-view>
-    </keep-alive>
+    </keep-alive> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -163,17 +164,27 @@ export default {
   computed: {
     
   },
+  mounted() {
+    console.log("app.vue mounted................")
+    this.$store.dispatch("getAllMeetings")
+    this.$store.dispatch("setOptions",{
+      picked: "", // default to all meetings
+      mileMax: 2,
+      day: new Date().getDay(),
+      home: {lat:44.9270729,lng:-93.4479148},
+    })
+  },
   created: function(){
     
-debugger
+//debugger
     console.log("app.vue created................")
     //this.fetchMeetings();
     //this.geoLocate();
     var self = this;
     this.testGeo();
-    this.timeFetch = window.setTimeout(function(){
-      self.fetchMeetings();
-    },2000)
+    // this.timeFetch = window.setTimeout(function(){
+    //   self.fetchMeetings();
+    // },2000)
   }
 }
 </script>

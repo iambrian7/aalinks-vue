@@ -83,7 +83,9 @@ router.get('/:name', function(req, res, next) {
   function handleError(err) {
     console.log("geomeeting error: " + err)
   }
-
+router.post('/create', function(req, res){
+  
+})
 // router.get('/create', function(req, res, next) {
 //   console.dir('hostname: ' + req.hostname)
 //   console.log("createing aalinks local")

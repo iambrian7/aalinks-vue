@@ -217,6 +217,7 @@ export default {
       },
       checkState: function(){
         // debugger;
+        console.log("checkState........................")
           var self = this;
         if (this.state == 1){
             // this.$validator.validateAll();

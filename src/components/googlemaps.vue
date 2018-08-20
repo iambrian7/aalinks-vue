@@ -25,7 +25,7 @@ export default {
         initMap: function(){
             this.map = new google.maps.Map(document.getElementById('my-map'), {
             center: {lat: 44.9169913, lng: -93.4435269},
-            zoom: 13
+            zoom: 16
             });
             var self = this;
 
@@ -165,6 +165,16 @@ export default {
         },
    },
    watch: {
+    locations: {
+       handler(val){
+       // do stuff
+        console.log("locations changed..........")
+        console.log("googlemaps.vue " + Object.keys(val).length + " locations found")
+       // console.log(JSON.stringify(val, null, 4))
+        this.makeNewMarkers(val);
+        },
+        deep: true
+    }
    },
   computed: {
   },

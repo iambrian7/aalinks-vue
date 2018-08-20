@@ -1,6 +1,9 @@
 <template>
 <div class="navigation">
-    <nav>
+  <span class="aalinks-title">
+    aalinks-vue
+  </span>
+  <nav>
         <ul>
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/meetings">Meetings</router-link></li>
@@ -30,6 +33,14 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+.aalinks-title{
+ position: absolute;
+ top: 10px;
+ left: 0;
+  font-size: 40px;
+  color: red;
+  text-shadow: -3px 0px 6px rgba(0, 0, 0, 0.83);
 }
 nav a.router-link-exact-active {
    font-weight: 700;

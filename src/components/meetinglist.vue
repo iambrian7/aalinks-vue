@@ -7,7 +7,12 @@
         v-for="(a, index) in meetings" 
         class='meeting-list-item' 
         v-bind:data-key='a.name'
-        > {{ a.name }}
+        ><div class="meeting-list-info">
+         <span> {{a.time_formatted}}</span>   <span>{{ a.day | dayname}} </span>
+        </div>
+        <div class="meeting-list-name">
+          {{ a.name }}
+        </div>
           </li>
     </ul>
   <!-- </div> end container -->
@@ -92,7 +97,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.class {
+  .meeting-list-info {
+    font-style: italic;
+    display: flex;
+    justify-content: space-around;
+  }
+  .meeting-list-name {
+    font-style: bold;
+    padding: 0 5px 0 10px;
+    font-size: 1.2em;
+  }
+  .class {
    
     background-color: #cccccc;
     width: 100wh;
@@ -102,5 +117,13 @@ export default {
 p {background: #ccc;}
 .meetinglist ul {padding: 0;}
 .meeting-list-item { padding: 5px; border: 1px solid grey; margin: 5px;
- background: #fff; text-align: left;  list-style: none;}
+ background: #fff; 
+ background: linear-gradient(to bottom, #b2e1ff 0%,#66b6fc 100%);
+ text-align: left;  list-style: none;
+ border-radius: 5px;
+
+ }
+ @media (min-height: 680px) {
+   
+ }
 </style>
