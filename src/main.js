@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VeeValidate from 'vee-validate';
+//import { StripeCheckout } from 'vue-stripe'
 
 import store from './store/store'
 //Vue.use(Vuex)
@@ -20,7 +21,12 @@ Vue.use(VeeValidate);
  Vue.component('my-component', {
   template: '<div>A custom component!</div>'
 })
+//Vue.component('stripe-checkout', StripeCheckout);
+
 Vue.config.productionTip = false
+
+
+
 export const Bus = new Vue() // This empty Vue model will serve as our event bus.
 /* eslint-disable no-new */
 var vm = new Vue({

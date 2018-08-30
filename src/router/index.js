@@ -5,8 +5,10 @@ import Meetings from '@/components/meetings'
 import addSimpleMeeting from '@/components/addSimpleMeeting'
 import addMeeting from '@/components/addmeeting'
 import MeetingsList from '@/components/meetinglist'
-import TestResponsiveForm from '@/components/TestResponsiveForm'
 //import ResponsiveForm from '@/components/acmeform'
+import TestResponsiveForm from '@/components/TestResponsiveForm'
+import Donate from '@/components/DonateVue'
+import AMeeting from '@/components/ameeting'
 
 Vue.use(Router)
 
@@ -16,6 +18,11 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/donate',
+      name: 'donate',
+      component: Donate
     },
     {
       path: '/responsiveform',
@@ -32,6 +39,12 @@ export default new Router({
       path: '/meetings',
       name: 'Meetings',
       component: Meetings
+    },
+    {
+      path: '/ameeting',
+      name: 'ameeting',
+      component: AMeeting,
+      props: true
     },
      {
       path: '/meetinglist',

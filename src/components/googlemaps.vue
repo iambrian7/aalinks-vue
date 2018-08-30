@@ -18,19 +18,84 @@ export default {
 		return {
             map : null,
             markers: [],
-            lastInfoWindow: null
+            lastInfoWindow: null,
+          //  selectedMeeting: this.$store.getters.getSelectedMeeting
     }
   },
   methods: {
-        initMap: function(){
-            this.map = new google.maps.Map(document.getElementById('my-map'), {
-            center: {lat: 44.9169913, lng: -93.4435269},
+      setMapCenter(meeting){
+     //   debugger
+     var self = this
+            if (meeting){
+
+                var m = this.markers.filter(function(x){
+                    return x.title == meeting.location
+                })[0]
+                // console.log(`found marker for ${m.name}`)
+                //      this.map.setCenter(m.getPosition());
+                //  map.setCenter(new google.maps.LatLng(lat, lng));
+                //    this.map.setZoom(10);
+                if (m == undefined){
+                  //  console.log("meeting undefined for " + m.location)
+                    return;
+                } 
+                
+                var bounds  = new google.maps.LatLngBounds();
+                
+                
+                //Everytime you add a new marker:
+                
+                var loc = new google.maps.LatLng(m.position.lat(), m.position.lng());
+                bounds.extend(loc);
+                //After all markers have been added:
+                
+                this.map.fitBounds(bounds);  //     # auto-zoom
+                this.map.panToBounds(bounds);  //   # auto-center
+                
+                
+                // google.maps.event.trigger(this.map, "resize");
+                // // this.map.setCenter(m.position)
+                // this.map.panTo(m.position);
+                 this.map.setZoom(14);
+
+
+                if (self.lastInfoWindow){
+                    self.lastInfoWindow.close();
+                } else {
+                    self.lastInfoWindow = new google.maps.InfoWindow();
+                }
+                var infowindow = new google.maps.InfoWindow({ maxWidth: 200});
+                infowindow.setContent(m.content);
+                infowindow.open(this.map, m);
+                self.lastInfoWindow = infowindow;
+            } else {
+                // unselect lastInfoWindow
+                if (self.lastInfoWindow){
+                    self.lastInfoWindow.close();
+                }
+                this.map.setZoom(10);
+                google.maps.event.trigger(this.map, "resize");
+            }
+                
+                // store.dispatch('handleMyStateChange');
+                //  }
+            },
+            initMap: function(){
+                this.map = new google.maps.Map(document.getElementById('my-map'), {
+                    center: {lat: 44.9169913, lng: -93.4435269},
             zoom: 16
             });
             var self = this;
 
             google.maps.event.addListener(self.map, 'click', function(event) {
                // console.log("map clicked................... at : lnglat " + event.latlng)
+              //  google.maps.event.addListener(map, "click", function(event) {
+                  console.log(`checking lastInfoWindow..${JSON.stringify(event, null, 3)}`)
+               //   console.log(`checking lastInfoWindow.====.${JSON.stringify(self.lastInfoWindow, null, 3)}`)
+                  if (self.lastInfoWindow){
+                    self.lastInfoWindow.close();
+                  }
+               // });
                 var mapZoom = self.map.getZoom();
                 
                 var startLocation = event.latLng;
@@ -110,6 +175,7 @@ export default {
                 m.setMap(null);
             })
             this.markers = [];
+            var self = this
             for(var key in locations){
                 var m = locations[key]
                 var lat = m.loc.coordinates[1]
@@ -129,14 +195,15 @@ export default {
                 marker.content = "<div class='top-info-window'>" + marker.content + "</div>";
                 google.maps.event.addListener(marker, 'click', (function (mark) {
                 return function () {
-                    if (this.lastInfoWindow)
-                        this.lastInfoWindow.close();
+                   // debugger
+                    if (self.lastInfoWindow)
+                    self.lastInfoWindow.close();
                     else
-                        this.lastInfoWindow = new google.maps.InfoWindow();
-                    var infowindow = new google.maps.InfoWindow();
+                    self.lastInfoWindow = new google.maps.InfoWindow();
+                    var infowindow = new google.maps.InfoWindow({ maxWidth: 200});
                     infowindow.setContent(mark.content);
                     infowindow.open(this.map, mark);
-                    this.lastInfoWindow = infowindow;
+                    self.lastInfoWindow = infowindow;
                     }
                     })(marker));
         //    bounds.extend(latlng);
@@ -174,14 +241,49 @@ export default {
         this.makeNewMarkers(val);
         },
         deep: true
-    }
+    },
+    // selectedMeeting: {
+    // handler (meeting) {
+    //     debugger
+    //       var m = this.markers.filter(function(x){
+    //           x.id == meeting.id
+    //       })
+    //      // console.log(`found marker for ${m.name}`)
+    //         this.map.setCenter(m)
+    //        // store.dispatch('handleMyStateChange');
+    //     }
+    // },
    },
   computed: {
+    //   selectedMeeting: function(){
+    //       var meeting = this.$store.getters.getSelectedMeeting
+    //       if (!meeting) { return null}
+    //       // find the selectedMeeting marker
+          
+    //   }
   },
   mounted: function(){
       var self = this;
       this.initMap();
       this.makeNewMarkers(this.locations);
+      this.$store.watch(
+            function (state) {
+                return state.selectedMeeting;
+            },
+            function (val) {
+                //do something on data change
+                if (val){
+                    console.log(`googlemaps.vue watch store: new selectedMeeting: name=${val.name}`)
+                    self.setMapCenter(val)
+                } else {
+                    console.log(` unselect meeting................`)
+                    self.setMapCenter(val)
+                }
+            },
+            {
+                deep: true //add this if u need to watch object properties change etc.
+            }
+        );
   },
   updated:function(){
       this.makeNewMarkers(this.locations);
@@ -210,6 +312,10 @@ export default {
         padding: 5px;
         background: #eee;
     }
+    .gm-style-iw {
+  width: 300px; 
+  min-height: 150px;
+}
     .gm-style-iw {padding: 0; margin: 0; border: 1px solid grey; background: #eee;}
     .infowin { background: yellow;}
 </style>

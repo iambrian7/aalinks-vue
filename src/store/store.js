@@ -42,13 +42,24 @@ export default new Vuex.Store({
       lat: 44.92707,
       lng: -93.44791
      // home: {lat:44.9270729,lng:-93.4479148},
-    }
+    },
+    viewMeeting: null,
+    selectedMeeting: null
   },
   //showing things, not mutating state
   getters: {
     // tripleCounter: state => {
     //   return state.counter * 3;
     // }
+    getSelectedMeeting: state => {
+      return state.selectedMeeting
+    },
+    getMileMax: state => {
+      return state.filters.mileMax
+    },
+    getViewMeeting: state => {
+      return state.viewMeeting
+    },
     getAllMeetings: state => {
       return state.meetings
     },
@@ -58,13 +69,14 @@ export default new Vuex.Store({
     getFilteredMeetings: (state) => {
     // getFilteredMeetings: (state) => (options) => {
     // debugger
+    console.log(`getFilteredMeetings...............`)
+    var day = state.filters.day //|| 7
+    var picked = state.filters.picked
+    var mileMax = state.filters.mileMax
+    var lat = state.filters.lat
+    var lng = state.filters.lng
       var newMeetings = state.meetings.filter(function(m){
-        var day = state.filters.day || 7
-        var picked = state.filters.picked
-        var mileMax = state.filters.mileMax
-        var lat = state.filters.lat
-        var lng = state.filters.lng
-
+//debugger
         return ((mileLimit(m,mileMax,lat,lng)) &&
                  (day == 7 || day == m.day) &&
                 (!picked || m.types.includes(picked))
@@ -89,7 +101,17 @@ export default new Vuex.Store({
       state.filters.mileMax = options.mileMax
       state.filters.lat = options.home.lat
       state.filters.lng = options.home.lng
-    }
+    },
+    setViewMeeting: (state, meeting ) => {
+      state.viewMeeting = meeting
+    },
+    setSelectedMeeting: (state, meeting ) => {
+      state.selectedMeeting = meeting
+    },
+    changeMileMax: (state , miles ) => {
+      state.filters.mileMax = miles
+    },
+
   }, 
   //commits the mutation, it's asynchronous
   actions: {
@@ -101,13 +123,24 @@ export default new Vuex.Store({
     //   }, asyncNum.duration);
     // }
     getAllMeetings: ({ commit }) => {
-      axios.get("http://localhost:8086/api")
+    //  axios.get("http://localhost:8086/api")
+      axios.get("https://moonstrider.com/meetings/?miles=40")
+      // axios.get("http://localhost:8086/api")
       .then(function(res) {
           commit('getAllMeetings', res.data)
       })
     },
-      setOptions: ({ commit }, options ) => {
-        commit('setOptions', options)
+    setViewMeeting: ({ commit }, meeting ) => {
+      commit('setViewMeeting', meeting)
+    },
+    changeMileMax: ({ commit }, miles ) => {
+      commit('changeMileMax', miles)
+    },
+    setSelectedMeeting: ({ commit }, meeting ) => {
+      if (meeting){
+        console.log(`store: setSelectedMeeting name=${meeting.name}`)
       }
+      commit('setSelectedMeeting', meeting)
+    },
   }
 });

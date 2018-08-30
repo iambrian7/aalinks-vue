@@ -2,7 +2,11 @@
   <div class="meetings">
     <div class="aaflex-tools">
       <div class="aaflex-search meeting-tools-item">
-        <button>Search</button>  <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
+        <!-- <button>Search</button>   -->
+        <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
+        <div class="map-options">
+            <button @click="listOpen = !listOpen">List</button>/<button @click="mapOpen = !mapOpen">Map</button>
+          </div>
       </div>
       <div class="options-container">
           <button @click="options = !options" class=" meeting-tools-item">Options</button>
@@ -20,12 +24,13 @@
             </select>
         </div>
       </div>
+      
 
 
        
 
     </div><!-- end tools -->
-    <div class="meeting-list-info">
+    <div class="meetings-info">
         <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
     </div>
     <div class="aaflex-miles-days">
@@ -47,10 +52,10 @@
       </div>     
      </div><!-- end of miles days -->
     <div class="aaflex-container">
-      <div class="aaflex-list">
+      <div class="aaflex-list" v-if="listOpen">
         <meeting-list :meetings="filteredMeetings"></meeting-list>
       </div>
-      <div class="aaflex-map">
+      <div class="aaflex-map" v-if="mapOpen">
         <google-map :locations="newlocations"></google-map>
       </div>
    </div>
@@ -141,7 +146,10 @@ export default {
       isActive: true,
       allMeetings: false,
       searchInput: '',
-      newlocations: {}
+      newlocations: {},
+      listOpen: true,
+      mapOpen: true,
+      meetings: []
     }
   },
   watch:{
@@ -149,7 +157,10 @@ export default {
       this.$store.state.filters.day = val
     },
     mileMax: function (val) {
-      this.$store.state.filters.mileMax = val
+   //   console.log("mileMax changed...............to " + val)
+      this.$store.dispatch("changeMileMax", val)
+      // this.$store.state.filters.mileMax = val
+      // debugger
     },
     picked: function (val) {
       this.$store.state.filters.picked = val
@@ -202,7 +213,7 @@ export default {
                    self.lng = data.lng;
                    self.$store.state.filters.lat = data.lat
                    self.$store.state.filters.lng = data.lng
-                   debugger
+                  // debugger
                     // console.log("entered: " + self.searchInput.value)
                     // console.log('get my location called');
                     self.searchInput = "";
@@ -221,7 +232,7 @@ export default {
               var latlng = {lat: parseFloat(lat), lng: parseFloat(lng)};
                  
               aalinksGeolocateLatLng(latlng,function(data){
-                debugger
+               // debugger
                     console.log("latlng located at: " + JSON.stringify(data.formatted_address))
                     self.baselocation = data.formatted_address;
               });
@@ -237,7 +248,9 @@ export default {
       //               )
       //   })
       
-    //  debugger
+    // debugger
+ //   this.$store.dispatch("getFilteredMeetings")
+    // var newMeetings = this.meetings
       var newMeetings = this.$store.getters.getFilteredMeetings
       // var newMeetings = this.$store.getters.getFilteredMeetings({
       //   day: this.day,
@@ -302,6 +315,8 @@ export default {
       console.log("created meetings..........")
      // debugger
       this.getAddressFromLatLng();
+      this.mileMax = this.$store.getters.getMileMax
+      this.meetings = this.$store.getters.getFilteredMeetings
     //  this.mileMax = 40;
     }
 }
@@ -309,12 +324,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .map-options {
+    display: none;
+
+  }
 .meetings { width: 100wh; height: 100vh; background: #ccc;
 padding: 0; margin: 0;}
 /* .aaflex-container {display: flex; align-content: flex-start; width: 100%; flex-direction: column;} */
 .aaflex-container {
   display: grid; 
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 3fr;
   grid-auto-rows: minmax(200px, auto);
   height: 800px;
   }
@@ -345,7 +364,7 @@ padding: 0; margin: 0;}
 .item {height: 90vh;}
 .active {background: #6cffbc;}
 /* .meeting-tools-item { min-width: 800px;} */
-.meeting-list-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
+.meetings-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
     background: #6cffbc; border-radius: 5px; font-size: 1.0em; padding: 10px;}
 /* .meeting-list-info span {} */
  /* #accts-todo-container { display: flex; justify-content: space-around;} */
@@ -374,11 +393,18 @@ padding: 0; margin: 0;}
 } */
 @media (min-height: 680px) {
   }
-@media (min-width: 900px) { 
+  @media screen and (max-width: 600px) {
   .aaflex-container {
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: minmax(200px, auto);
   height: 800px;
+  }
+ .meetings-info{
+   display: none;
+ }
+ .map-options {
+    display: block;
+
   }
 }
     /* end media query for large screens */

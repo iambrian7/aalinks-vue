@@ -7,12 +7,17 @@
         v-for="(a, index) in meetings" 
         class='meeting-list-item' 
         v-bind:data-key='a.name'
+        @click="viewMeeting(a)"
         ><div class="meeting-list-info">
-         <span> {{a.time_formatted}}</span>   <span>{{ a.day | dayname}} </span>
+         <span> {{a.time_formatted}}     {{ a.day | dayname}} </span>
+         <!-- <span> {{a.time_formatted}}</span>   <span>{{ a.day | dayname}} </span> -->
+         <span class="meeting-list-name">
+           {{ a.name }}
+          </span>
         </div>
-        <div class="meeting-list-name">
-          {{ a.name }}
-        </div>
+            <div v-if="detailsOpen == a.name" class="meeting-list-details">
+              Name: {{a.name}}
+            </div>
           </li>
     </ul>
   <!-- </div> end container -->
@@ -20,6 +25,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'MeetingList',
   props: ["meetings"],
@@ -28,10 +34,25 @@ export default {
       msg: 'Welcome to Meeting List',
       query: "",
       meetingObj: {},
-      meetingIndex: []
+      meetingIndex: [],
+      detailsOpen: ''
     }
   }, 
   methods: {
+
+    viewMeeting: function(meeting){
+      console.log("view meeting " + meeting.name)
+      console.log("view detailsOpen " + this.detailsOpen)
+      // console.log("view meeting " + JSON.stringify(meeting, null, 3))
+      if (this.detailsOpen && this.detailsOpen == meeting.name){
+        this.detailsOpen = ""
+        this.$store.dispatch("setSelectedMeeting", null)
+      } else {
+        this.detailsOpen = meeting.name
+        //this.$router.push({ path: '/ameeting', params: { meeting }}) 
+        this.$store.dispatch("setSelectedMeeting", meeting)
+      }
+    },
     fixIndex: function(){
      // debugger;
       self = this;
@@ -56,7 +77,7 @@ export default {
         }
          
       })
-     debugger
+     //debugger
       this.meetingIndex = indx;
       return this.meetingIndex;
     }
@@ -97,10 +118,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .meeting-list-details{
+    margin: 5px;
+    padding: 5px;
+    background: #ccc;
+    font-size: 2em;
+  }
   .meeting-list-info {
     font-style: italic;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
   }
   .meeting-list-name {
     font-style: bold;
@@ -123,7 +150,17 @@ p {background: #ccc;}
  border-radius: 5px;
 
  }
- @media (min-height: 680px) {
-   
+ @media screen and (max-width: 600px) {
+  .meeting-list-info {
+   font-size: 0.8em;
+   color: black;
+   font-weight: 900;
+  }
+  .meeting-list-name {
+    font-weight: 700;
+    padding: 0 5px 0 10px;
+    font-size: 1.0em;
+  }
+  
  }
 </style>

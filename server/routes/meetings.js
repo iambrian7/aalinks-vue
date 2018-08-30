@@ -50,7 +50,8 @@ router.get('/', function(req, res, next) {
     //   console.log(locations[i].loc.coordinates[1] + ": " + locations[i].loc.coordinates[0])
     // }
     console.log("locations found: " + locations.length)
-    res.json(200, locations);
+  //  res.json(200, locations);
+    res.status(200).json(obj)
   });
  // }// else got miles
 });
