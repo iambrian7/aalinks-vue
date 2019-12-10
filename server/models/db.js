@@ -1,6 +1,25 @@
 var mongoose = require('mongoose');
 //mongoose.connect('mongodb://iambrian:bkcbkc07@ds031108.mlab.com:31108/aalinks');
-mongoose.connect('mongodb://localhost:27017/products');
+mongoose.connect('mongodb://localhost:27017/vue-meetings', {useNewUrlParser: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log("connected to products/geomeetings")
+});
+// const { MongoClient, ObjectID } = require('mongodb');
+
+//  function(req, res) {
+//  (async function mongo() {
+//       let client;
+//       try {
+//         client = await MongoClient.connect(url, {useNewUrlParser: true});
+//         debug('Connected correctly to server');
+
+//         const db = client.db(dbName);
+// }
+
+
 //mongodb://<dbuser>:<dbpassword>@ds031108.mlab.com:31108/aalinks
 var testMeeting = {
   "id": 40997,

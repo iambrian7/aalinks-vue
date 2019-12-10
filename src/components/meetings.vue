@@ -1,9 +1,17 @@
 <template>
   <div class="meetings">
-    <div class="aaflex-tools">
+    <!-- <div class="aaflex-tools">
+      
+
+
+       
+
+    </div>end tools -->
+    <div class="meetings-info">
+        <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
+        <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
       <div class="aaflex-search meeting-tools-item">
         <!-- <button>Search</button>   -->
-        <input type="text" @keyup.enter="geolocateCenter" v-model="searchInput" placeholder="enter new home location...">
         <div class="map-options">
             <button @click="listOpen = !listOpen">List</button>/<button @click="mapOpen = !mapOpen">Map</button>
           </div>
@@ -24,14 +32,6 @@
             </select>
         </div>
       </div>
-      
-
-
-       
-
-    </div><!-- end tools -->
-    <div class="meetings-info">
-        <span>{{ filteredMeetings.length }} meetings found within {{mileMax}} of {{baselocation}} </span>
     </div>
     <div class="aaflex-miles-days">
       <div class="aaflex-tools-miles meeting-tools-item">
@@ -213,6 +213,8 @@ export default {
                    self.lng = data.lng;
                    self.$store.state.filters.lat = data.lat
                    self.$store.state.filters.lng = data.lng
+                  self.$store.dispatch("getAllMeetings")
+
                   // debugger
                     // console.log("entered: " + self.searchInput.value)
                     // console.log('get my location called');
@@ -317,13 +319,14 @@ export default {
       this.getAddressFromLatLng();
       this.mileMax = this.$store.getters.getMileMax
       this.meetings = this.$store.getters.getFilteredMeetings
+      this.$store.state.filters.day = this.day;
     //  this.mileMax = 40;
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
   .map-options {
     display: none;
 
@@ -344,10 +347,14 @@ padding: 0; margin: 0;}
 .aaflex-search {}
 .aaflex-miles-days{
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: 5px;
+  margin: 5px;
 }
 .aaflex-tools-miles{
   display: flex;
+  margin-right: 20px;
 }
 .aaflex-tools-days {
   display: flex;
@@ -366,7 +373,15 @@ padding: 0; margin: 0;}
 /* .meeting-tools-item { min-width: 800px;} */
 .meetings-info {display: flex; justify-content: space-around; border: 1px solid black; margin: 10px; 
     background: #6cffbc; border-radius: 5px; font-size: 1.0em; padding: 10px;}
-/* .meeting-list-info span {} */
+.meetings-info span {
+  font-size: 1.6em;
+  text-align: right;
+  padding-left: 20px;
+}
+.meetings-info input {
+  max-height: 28px;
+  min-width: 150px;
+}
  /* #accts-todo-container { display: flex; justify-content: space-around;} */
 .accts-list { padding: 10px; border: 1px solid grey; background: #666; max-height: 800px; }
 /* .accts-list { padding: 10px; border: 1px solid grey; flex: 1; background: #666;} */

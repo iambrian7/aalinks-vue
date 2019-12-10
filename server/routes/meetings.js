@@ -2,17 +2,40 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose') //mongo connection
 var Geomeetings = require('../models/db');
+const MeetingGuide = require("./MeetingGuide");
+const md = MeetingGuide();
 
 //var index = require('./index');
 
 
 //Geomeetings._ensureIndex({'loc.coordinates':'2dsphere'});
-router.get('/', function(req, res, next) {
+router.get('/meetingsx', function(req, res, next) {
  // res.send("get meetings...............")
  console.log("api getting meetings....")
-  var miles = req.query.miles;
-  var lat = req.query.lat;
-  var lng = req.query.lng;
+ console.log(`params: ${JSON.stringify( req.params)}`)
+ console.log(`params: ${JSON.stringify( req.query)}`)
+ console.time("geofind")
+ var miles = req.query.miles;
+ var lat = req.query.lat;
+ var lng = req.query.lng;
+ if (miles == undefined) {
+   miles = 3000;
+  }
+  console.log("got miles= " + miles + " lat=" + lat + " lng=" + lng)
+  const mymeetings = md.geofind(50,lat,lng);
+  console.timeEnd("geofind")
+  res.status(200).json(mymeetings)
+});
+
+
+
+//Geomeetings._ensureIndex({'loc.coordinates':'2dsphere'});
+router.get('/meetings', function(req, res, next) {
+ // res.send("get meetings...............")
+ console.log("api getting meetings....")
+  var miles = req.params.miles;
+  var lat = req.params.lat;
+  var lng = req.params.lng;
   if (miles == undefined) {
     miles = 3000;
     //res.redirect('/');
@@ -43,7 +66,11 @@ router.get('/', function(req, res, next) {
       }
     }
   ).limit(limit).exec(function(err, locations) {
-    if (err) {return res.json(500, err);}
+    if (err) {
+      console.log("error found: " + err)
+      
+      return res.json(500, err);
+    }
     console.timeEnd('retrieved');
     // console.log('meeting found: ' + JSON.stringify(locations,null,4))
     // for(var i=0; i<locations.length; i++){
@@ -51,10 +78,12 @@ router.get('/', function(req, res, next) {
     // }
     console.log("locations found: " + locations.length)
   //  res.json(200, locations);
-    res.status(200).json(obj)
+    res.status(200).json(locations)
   });
  // }// else got miles
 });
+
+
 router.get('/:name', function(req, res, next) {
  
   var name = req.params.name;

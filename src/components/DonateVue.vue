@@ -113,6 +113,9 @@
                         Place Order
                     </span>
                 </button>
+                <div class="column order-complete" v-if="orderComplete">
+                    thanks for your order!
+                </div>
             </div>
         </div>
     </div>
@@ -125,7 +128,7 @@ export default {
     data(){
         return {
             stripeKey: 'pk_test_UWB3Uz5xAWTWkF0BznCORJgb',
-
+            orderComplete: false,
             // fields
             name: 'Connor Leech',
             email: 'connor@employbl.com',
@@ -142,7 +145,7 @@ export default {
                 number: '4242424242424242',
                 cvc: '123',
                 exp_month: '01',
-                exp_year: '19'
+                exp_year: '22'
             },
 
             // validation
@@ -157,6 +160,7 @@ export default {
     },
     methods: {
         validate(){
+            console.log(`donate validate...........`)
             this.clearCardErrors();
             let valid = true;
             if(!this.card.number){ valid = false; this.cardNumberError = "Card Number is Required"; }
@@ -204,7 +208,8 @@ export default {
                 };
 
                 // Send to our server
-            var url = 'http://localhost:3970/api/charge'
+         //   var url = 'http://localhost:3970/api/charge'
+            var url = 'http://localhost:8086/charge'
 
                 // var url = 'https://moonstrider.com/api/charge'
                 // axios.post('url', data, {
@@ -223,11 +228,13 @@ export default {
                 // axios.post(`${window.endpoint}/charge`, request)
                     .then((res) => {
                         var error = res.data.error;
-                        var charge = res.data.charge;
+                        var charged = res.data.charged;
                         if (error){
                             console.error(error);
                         } else {
-                            this.$router.push({ path: `order-complete/${charge.id}` })
+                            console.log(`Order Complete: ${JSON.stringify(charged, null,3)}`)
+                            this.orderComplete = true;
+                            // this.$router.push({ path: `order-complete/${charged.id}` })
                         }
                     });
             }
@@ -246,6 +253,16 @@ h2 { text-decoration: underline; }
 .help-img{
   border-radius: 10px;
   box-shadow: 5px;
+}
+.input {
+    font-size: 1.8em;
+}
+.order-complete{
+    background: red;
+    color: white;
+    font-size: 2em;
+    text-align: center;
+    padding: 20px;
 }
 @media screen and (max-width: 1024px) { /* Specific to this particular image */
   .help {

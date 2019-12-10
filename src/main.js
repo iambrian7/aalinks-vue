@@ -4,23 +4,23 @@ import Vue from 'vue'
 //import Vuex from 'vuex'
 import App from './App'
 import router from './router'
-import VeeValidate from 'vee-validate';
+// import VeeValidate from 'vee-validate';
 //import { StripeCheckout } from 'vue-stripe'
 
 import store from './store/store'
 //Vue.use(Vuex)
 
-import jQuery from 'jquery'
+// import jQuery from 'jquery'
 
-global.jQuery = jQuery
-global.$ = jQuery
-let Bootstrap = require('bootstrap')
-import 'bootstrap/dist/css/bootstrap.css'
-Vue.use(VeeValidate);
- // register
- Vue.component('my-component', {
-  template: '<div>A custom component!</div>'
-})
+// global.jQuery = jQuery
+// global.$ = jQuery
+// let Bootstrap = require('bootstrap')
+// import 'bootstrap/dist/css/bootstrap.css'
+// Vue.use(VeeValidate);
+//  // register
+//  Vue.component('my-component', {
+//   template: '<div>A custom component!</div>'
+// })
 //Vue.component('stripe-checkout', StripeCheckout);
 
 Vue.config.productionTip = false

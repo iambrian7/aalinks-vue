@@ -1,6 +1,5 @@
 <template>
   <div class="meetinglist">
-
   <!-- <div class="container"> -->
     <ul>
       <li
@@ -100,24 +99,22 @@ export default {
   created: function(){
    // debugger;
    console.log("meetinglist created")
-    self = this;
     this.meetings.forEach(function(m){
-      self.meetingObj[m._id] = m;  
-      })
+      this.meetingObj[m._id] = m;  
+      },this)
   },
     updated: function(){
       console.log("meetinglist updated")
    // debugger;
-    self = this;
     this.meetings.forEach(function(m){
-      self.meetingObj[m._id] = m;  
-      })
+      this.meetingObj[m._id] = m;  
+      },this)
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
   .meeting-list-details{
     margin: 5px;
     padding: 5px;

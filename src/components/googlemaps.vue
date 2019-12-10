@@ -2,6 +2,7 @@
 <div id="googlemaps">
      <!--<button @click="addMarker">Add Marker</button> <span>locations from prop len = {{Object.keys(locations).length}}</span>-->
      <div class="hide">{{Object.keys(locations).length}}</div>
+     <div id="panel"></div>
     <div style="height:100%; width:100%;">
         <div id="my-map">
 
@@ -31,7 +32,7 @@ export default {
                 var m = this.markers.filter(function(x){
                     return x.title == meeting.location
                 })[0]
-                // console.log(`found marker for ${m.name}`)
+                console.log(`found marker for ${m.name}`)
                 //      this.map.setCenter(m.getPosition());
                 //  map.setCenter(new google.maps.LatLng(lat, lng));
                 //    this.map.setZoom(10);
@@ -83,9 +84,18 @@ export default {
             initMap: function(){
                 this.map = new google.maps.Map(document.getElementById('my-map'), {
                     center: {lat: 44.9169913, lng: -93.4435269},
-            zoom: 16
+                    gestureHandling: 'greedy',
+                    zoom: 16
             });
             var self = this;
+//Adding zoom_changed event listener here
+  this.map.addListener('zoom_changed', function() {  
+    document.getElementById('panel').innerHTML  = `Zoom: ${self.map.getZoom()}`;
+    window.setTimeout(function() {  
+      document.getElementById('panel').innerHTML = '';
+    }, 2000);  
+  });  
+
 
             google.maps.event.addListener(self.map, 'click', function(event) {
                // console.log("map clicked................... at : lnglat " + event.latlng)
@@ -318,4 +328,35 @@ export default {
 }
     .gm-style-iw {padding: 0; margin: 0; border: 1px solid grey; background: #eee;}
     .infowin { background: yellow;}
+
+    #panel {    
+        position: absolute;    
+        top: 330px;    
+        left: 30%;    
+        z-index: 5;    
+        padding: 0px;    
+        border: 0px solid #999;    
+        text-align: center; 
+        background:#0000FF;
+        width:150px;
+        color:#fff;
+        }    
+        
+        #panel, .panel {    
+        font-family: 'Roboto','sans-serif';    
+        line-height: 30px;    
+        padding-left: 10px;    
+        }    
+        
+        #panel select, #panel input, .panel select, .panel input {    
+        font-size: 15px;    
+        }    
+        
+        #panel select, .panel select {    
+        width: 100%;    
+        }    
+        
+        #panel i, .panel i {    
+        font-size: 12px;    
+        } 
 </style>

@@ -39,12 +39,17 @@ export default new Vuex.Store({
       day: 0,
       picked: '',
       mileMax: 2,
+      startMiles: 50,
       lat: 44.92707,
       lng: -93.44791
-     // home: {lat:44.9270729,lng:-93.4479148},
+      // home: {lat:44.9270729,lng:-93.4479148},
     },
+    startMiles: 50,
+    lat: 44.92707,
+    lng: -93.44791,
     viewMeeting: null,
-    selectedMeeting: null
+    selectedMeeting: null,
+    activetab: 1
   },
   //showing things, not mutating state
   getters: {
@@ -73,6 +78,7 @@ export default new Vuex.Store({
     var day = state.filters.day //|| 7
     var picked = state.filters.picked
     var mileMax = state.filters.mileMax
+
     var lat = state.filters.lat
     var lng = state.filters.lng
       var newMeetings = state.meetings.filter(function(m){
@@ -122,11 +128,44 @@ export default new Vuex.Store({
     //     commit('decrement', asyncNum.by);
     //   }, asyncNum.duration);
     // }
-    getAllMeetings: ({ commit }) => {
-    //  axios.get("http://localhost:8086/api")
-      axios.get("https://moonstrider.com/meetings/?miles=40")
-      // axios.get("http://localhost:8086/api")
+    getAllMeetings: ({ commit, state }) => {
+      console.log("actions: getAllMeetings")
+      console.time("getAllMeetings");
+      ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
+      ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
+
+      // axios.get("https://moonstrider.com/meetings/?miles=40")
+      
+      ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
+      ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
+      ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
+      
+      
+      /////////////  get meetings from file in server
+      /////////////  get meetings from file in server
+      // console.log(`getting: http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
+      
+      axios.get(`http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
+      
+      /////////////  get meetings from file in server
+      /////////////  get meetings from file in server
+      /////////////  get meetings from file in server
+
+      ////////////   get meetings from mongodb (1047 max)
+      ////////////   get meetings from mongodb (1047 max)
+
+      // axios.get(`http://localhost:8086/api/meetings/?miles=${state.startMiles}&lat=${state.lat}&lng=${state.lng}`)
+     
+      ////////////   get meetings from mongodb (1047 max)
+      ////////////   get meetings from mongodb (1047 max)
+      ////////////   get meetings from mongodb (1047 max)
+
+
+      // axios.get("http://localhost:8086/api/meetings/?miles=40&lat=lat&lng=lng")
       .then(function(res) {
+        console.log(`Meetings found" ${res.data.length}`)
+        console.log(`first meeting format: ${JSON.stringify(res.data[0], null, 2)}`)
+        console.timeEnd("getAllMeetings");
           commit('getAllMeetings', res.data)
       })
     },

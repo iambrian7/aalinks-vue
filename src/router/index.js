@@ -7,7 +7,9 @@ import addMeeting from '@/components/addmeeting'
 import MeetingsList from '@/components/meetinglist'
 //import ResponsiveForm from '@/components/acmeform'
 import TestResponsiveForm from '@/components/TestResponsiveForm'
-import Donate from '@/components/DonateVue'
+// import Donate from '@/components/Donate'
+// import Donate from '@/components/DonateVue'
+import Donate from '@/components/Donate2'
 import AMeeting from '@/components/ameeting'
 
 Vue.use(Router)

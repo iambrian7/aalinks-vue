@@ -28,6 +28,7 @@ exports.create = (req, res) => {
 
 // Retrieve and return all meetings from the database.
 exports.findAll = (req, res) => {
+    console.log(`find all meetings`)
     meeting.find()
     .then(meetings => {
         res.send(meetings);
