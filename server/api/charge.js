@@ -4,27 +4,26 @@
 var express = require('express');
 var router  = express.Router();
 var Order = require('../models/order');
-// var stripe = require('stripe')("sk_test_fa4WIVNTFutk2sQZO9AF54jh");
 var stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 //  *************   start up code  *******************
 // // Routes
-router.post('/', function (req, res) {
-  console.log('apicharge route...............')
+router.post('/', function (req, res) { // route = 'http://localhost:8086/charge'
+  console.log('apicharge route................')
   console.log(req.body); //This prints the JSON document received (if it is a JSON document)
   // res.json(req.body);
   (async () => {
     const charge = await stripe.charges.create({
       amount: req.body.amount * 100, //1000, // Amount in cents
       currency: "usd",
-        source: req.body.stripeToken,
-        description: "Donation",
+      source: req.body.stripeToken,
+      description: "Donation",
+    });
+    res.status(200).json({
+      message: 'Welcome to the project-name api',
+      charged: charge
       });
-      res.status(200).json({
-        message: 'Welcome to the project-name api',
-        charged: charge
-        });
-      })();
+    })();
       
       
       // var charge = stripe.charges.create({

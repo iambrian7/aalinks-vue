@@ -27,7 +27,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .input-group {
       position: relative;
       margin: 20px 0 20px;

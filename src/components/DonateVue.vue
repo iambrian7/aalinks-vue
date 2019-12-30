@@ -226,9 +226,9 @@ export default {
                         }
                 })
                 // axios.post(`${window.endpoint}/charge`, request)
-                    .then((res) => {
-                        var error = res.data.error;
-                        var charged = res.data.charged;
+                    .then((x) => {
+                        var error = x.data.error;
+                        var charged = x.data.charged;
                         if (error){
                             console.error(error);
                         } else {

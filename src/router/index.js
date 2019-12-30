@@ -11,10 +11,14 @@ import TestResponsiveForm from '@/components/TestResponsiveForm'
 // import Donate from '@/components/DonateVue'
 import Donate from '@/components/Donate2'
 import AMeeting from '@/components/ameeting'
+import ThankYou from '@/components/ThankYou'
+import SingleMeeting from '@/components/SingleMeeting'
+import Meeting from '@/components/Meeting'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -27,17 +31,28 @@ export default new Router({
       component: Donate
     },
     {
+      path: '/thankyou',
+      name: 'thankyou',
+      component: ThankYou
+    },
+    // {
+    //   path: "/:product",
+    //   name: "Product",
+    //   props: true,
+    //   component: Product
+    // },
+    {
       path: '/responsiveform',
       name: 'contactform',
       component: TestResponsiveForm
     },
-     {
+    {
       path: '/addmeeting',
       name: 'add-meeting',
-     component: addSimpleMeeting
-    //  component: addMeeting
+      component: addSimpleMeeting
+      //  component: addMeeting
     },
-     {
+    {
       path: '/meetings',
       name: 'Meetings',
       component: Meetings
@@ -48,10 +63,32 @@ export default new Router({
       component: AMeeting,
       props: true
     },
-     {
+    {
       path: '/meetinglist',
       name: 'MeetingList',
       component: MeetingsList
-    }
+    },
+    {
+      // path: '/single',
+      path: '/meeting/:id',
+      name: 'meeting',
+      // props: true,
+      // props: (route) => ({
+      //     meeting: meeting,
+      //     ...route.params
+      // }),
+      component: Meeting
+    },
+    {
+      // path: '/single',
+      path: '/:meetingpath',
+      name: 'single',
+      props: true,
+      // props: (route) => ({
+      //     meeting: meeting,
+      //     ...route.params
+      // }),
+      component: SingleMeeting
+    },
   ]
 })

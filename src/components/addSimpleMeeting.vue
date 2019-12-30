@@ -13,11 +13,13 @@
         <form @submit.prevent="signUp" class="aalinks-form">
             <div class="aalinks-form-name">
               <!-- <div class="form-group col-sm-4"> -->
-                <label>Group Name</label>
-                <div v-bind:class="{'col-6': true, 'has-danger': errors.has('firstName')}">
+                <label>Group Name
+                  <input type="text"  v-model="newmeeting.group.group_name" >
+                </label>
+                <!-- <div v-bind:class="{'col-6': true, 'has-danger': errors.has('firstName')}">
                   <input id="name" name="name" type="text" class="form-control" placeholder="Group Name.." v-model="newmeeting.group.group_name" v-validate="'required|min:5'">
                   <span class=" error text-danger" v-if="errors.has('name')">{{errors.first('name')}}</span>
-                </div>
+                </div> -->
               </div>
               <div class="aalinks-form-day-time">
                 <!-- <div class="form-group col-sm-4"> -->
@@ -34,7 +36,7 @@
                 <div class="aalinks-form-group">
                   <label>Time</label>
                   <select type="text"  v-model="newmeeting.group.time" id="time" name='time' class="form-control">
-                    <option v-for="n in selectTimes" :value="n">{{ n }}</option>
+                    <option v-for="n in selectTimes" :value="n" :key="n">{{ n }}</option>
                   </select>
                 </div>
                 
@@ -51,7 +53,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 form-background">       
-                    <add-meetingselect :formAddress="newmeeting.location"a @chkecklocation="ckLocation"></add-meetingselect>
+                    <add-meetingselect :formAddress="newmeeting.location" @chkecklocation="ckLocation"></add-meetingselect>
                   <div class="map-error" v-if="addressError">Location form is not valid</div>
                   <div v-if="newmeeting.location.mapped_address" class="map-results">
              <p>       Form formatted this address: {{address}}</p>
@@ -172,7 +174,8 @@
         },
         newlocations: {},
         state: 1,
-        selectedMeetings: []
+        selectedMeetings: [],
+        errors: []
       }
     },
     methods: {
@@ -250,7 +253,7 @@
           parseGeoCoderResult(result, this.newmeeting.location)
           console.dir("googleGeocoder: this.newmeeting.location.mapped_address = " + JSON.stringify(this.newmeeting.location.mapped_address, null, 4))
         //  this.address = this.newmeeting.location.mapped_address
-          this.$children[0].$validator.errors.clear()
+          // this.$children[0].$validator.errors.clear()
           //   Object.keys(this.newmeeting.location).forEach((k) => {
           //       this.newmeeting.location[k] = '';
           //   })

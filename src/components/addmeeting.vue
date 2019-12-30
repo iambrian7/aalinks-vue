@@ -20,7 +20,7 @@
                         <li></li>
                     </ul> 
                 </div>
-                <div id="step2-intro" class="step-intro"v-if="state == 2">
+                <div id="step2-intro" class="step-intro" v-if="state == 2">
                     <div v-if='state > 1' class="location-summary row ">
                          <div class="col-md-12 "> 
                              <div class="selected-locations">
@@ -50,7 +50,7 @@
                     </div><!-- location-summary end -->
                     Add meeting name, time, day and other options
                 </div>
-                <div id="step3-intro" class="step-intro"v-if="state == 3">
+                <div id="step3-intro" class="step-intro" v-if="state == 3">
                     Add contact info here 
                 </div>
                 
@@ -221,11 +221,11 @@ export default {
           var self = this;
         if (this.state == 1){
             // this.$validator.validateAll();
-             this.$children[0].$validator.validateAll().then(function(success) {
-             if (!success) return;
+            //  this.$children[0].$validator.validateAll().then(function(success) {
+            //  if (!success) return;
             self.state = 2;      
        // alert("All good")
-      })
+    //   })
         } else {
             if (this.state == 2){
                 this.state = 3;
@@ -272,7 +272,7 @@ export default {
         parseGeoCoderResult(result, this.newmeeting.location)
         console.dir("googleGeocoder: this.newmeeting.location.mapped_address = " + JSON.stringify(this.newmeeting.location.mapped_address, null, 4))
         this.address = this.newmeeting.location.mapped_address
-        this.$children[0].$validator.errors.clear()
+        // this.$children[0].$validator.errors.clear()
         //   Object.keys(this.newmeeting.location).forEach((k) => {
         //       this.newmeeting.location[k] = '';
         //   })
@@ -332,10 +332,10 @@ export default {
         // } // add this location data 
         // this.newlocations = loc
         // console.log("formAddress = " + JSON.stringify(this.formAddress, null, 3))
-        this.$nextTick(function () {
-                console.log("next tick validating") // => 'updated'
-                 this.$validator.validateAll();
-          })
+        // this.$nextTick(function () {
+        //         console.log("next tick validating") // => 'updated'
+        //          this.$validator.validateAll();
+        //   })
        
      //   this.address = '';
       },

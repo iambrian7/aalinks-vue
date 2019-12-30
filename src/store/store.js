@@ -35,6 +35,7 @@ const debug = process.env.NODE_ENV !== 'production'
 export default new Vuex.Store({
   state: {
     meetings: [],
+    newLocation: {"name":"Turning Point","lat":30.225,"lng":-92.011,"address":"210 Eighth St, Lafayette, LA 70501, USA"},
     filters: {
       day: 0,
       picked: '',
@@ -49,7 +50,8 @@ export default new Vuex.Store({
     lng: -93.44791,
     viewMeeting: null,
     selectedMeeting: null,
-    activetab: 1
+    activetab: 1,
+    stripeKey: null
   },
   //showing things, not mutating state
   getters: {
@@ -68,9 +70,10 @@ export default new Vuex.Store({
     getAllMeetings: state => {
       return state.meetings
     },
-    // getTodoById: (state) => (id) => {
-    //   return state.todos.find(todo => todo.id === id)
-    // }
+    getMeetingById: (state) => (id) => {
+      console.log(`store:getter:getMeetingById= ${id}`)
+      return state.meetings.find(x => x.id === id)
+    },
     getFilteredMeetings: (state) => {
     // getFilteredMeetings: (state) => (options) => {
     // debugger
@@ -117,6 +120,9 @@ export default new Vuex.Store({
     changeMileMax: (state , miles ) => {
       state.filters.mileMax = miles
     },
+    getStripeKey: (state , key ) => {
+      state.stripeKey = key
+    },
 
   }, 
   //commits the mutation, it's asynchronous
@@ -128,7 +134,24 @@ export default new Vuex.Store({
     //     commit('decrement', asyncNum.by);
     //   }, asyncNum.duration);
     // }
-    getAllMeetings: ({ commit, state }) => {
+  //   getProducts({commit}, type) {
+  //     return axios.get(`/api/products/${type}`)
+  //         .then(res => {
+  //             let products = res.data;
+  //             commit('SET_PRODUCTS', {products, type})
+  //         }).catch(err => {
+  //         console.log(err);
+  //     })
+  // },
+    getStripeKey({commit, state}) {
+      console.log(`before: actions: getStripeKey: `)
+      return axios.get(`http://localhost:8086/stripekey`)
+        .then(res => {
+          console.log(`after actions: getStripeKey: ${res.data.publishableKey}`)
+          commit('getStripeKey', res.data.publishableKey);
+        })
+    },
+    getAllMeetings: async ({ commit, state }) => {
       console.log("actions: getAllMeetings")
       console.time("getAllMeetings");
       ///////////////  get meetings from server on DigitalOcean acces is mongodb getting only ~1000 meetings potiental
@@ -145,29 +168,31 @@ export default new Vuex.Store({
       /////////////  get meetings from file in server
       // console.log(`getting: http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
       
-      axios.get(`http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
+      var res = await axios.get(`http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
+      // axios.get(`http://localhost:8086/api/meetingsx/?miles=${state.startMiles}&lat=${state.filters.lat}&lng=${state.filters.lng}`)
       
       /////////////  get meetings from file in server
       /////////////  get meetings from file in server
       /////////////  get meetings from file in server
-
+      
       ////////////   get meetings from mongodb (1047 max)
       ////////////   get meetings from mongodb (1047 max)
-
+      
       // axios.get(`http://localhost:8086/api/meetings/?miles=${state.startMiles}&lat=${state.lat}&lng=${state.lng}`)
-     
+      
       ////////////   get meetings from mongodb (1047 max)
       ////////////   get meetings from mongodb (1047 max)
       ////////////   get meetings from mongodb (1047 max)
-
-
+      
+      
       // axios.get("http://localhost:8086/api/meetings/?miles=40&lat=lat&lng=lng")
-      .then(function(res) {
-        console.log(`Meetings found" ${res.data.length}`)
-        console.log(`first meeting format: ${JSON.stringify(res.data[0], null, 2)}`)
         console.timeEnd("getAllMeetings");
-          commit('getAllMeetings', res.data)
-      })
+      commit('getAllMeetings', res.data)
+      // .then(function(x) {
+      //   console.log(`Meetings found" ${x.data.length}`)
+      //   console.log(`first meeting format: ${JSON.stringify(x.data[0], null, 2)}`)
+      //     commit('getAllMeetings', x.data)
+      // })
     },
     setViewMeeting: ({ commit }, meeting ) => {
       commit('setViewMeeting', meeting)

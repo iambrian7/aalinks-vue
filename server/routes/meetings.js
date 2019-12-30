@@ -5,16 +5,7 @@ var Geomeetings = require('../models/db');
 const MeetingGuide = require("./MeetingGuide");
 const md = MeetingGuide();
 
-//var index = require('./index');
-
-
-//Geomeetings._ensureIndex({'loc.coordinates':'2dsphere'});
 router.get('/meetingsx', function(req, res, next) {
- // res.send("get meetings...............")
- console.log("api getting meetings....")
- console.log(`params: ${JSON.stringify( req.params)}`)
- console.log(`params: ${JSON.stringify( req.query)}`)
- console.time("geofind")
  var miles = req.query.miles;
  var lat = req.query.lat;
  var lng = req.query.lng;
@@ -23,28 +14,19 @@ router.get('/meetingsx', function(req, res, next) {
   }
   console.log("got miles= " + miles + " lat=" + lat + " lng=" + lng)
   const mymeetings = md.geofind(50,lat,lng);
-  console.timeEnd("geofind")
   res.status(200).json(mymeetings)
 });
 
 
 
-//Geomeetings._ensureIndex({'loc.coordinates':'2dsphere'});
 router.get('/meetings', function(req, res, next) {
- // res.send("get meetings...............")
  console.log("api getting meetings....")
   var miles = req.params.miles;
   var lat = req.params.lat;
   var lng = req.params.lng;
   if (miles == undefined) {
     miles = 3000;
-    //res.redirect('/');
   }
- // else {
-
-  
-  
- // miles = 9000;
   console.log("got miles= " + miles + " lat=" + lat + " lng=" + lng)
   var limit = 9000;//3000;//req.query.limit || 10;
   var maxDistance = miles * 1600;// 3963.2;//req.query.distance || 8;
@@ -72,15 +54,9 @@ router.get('/meetings', function(req, res, next) {
       return res.json(500, err);
     }
     console.timeEnd('retrieved');
-    // console.log('meeting found: ' + JSON.stringify(locations,null,4))
-    // for(var i=0; i<locations.length; i++){
-    //   console.log(locations[i].loc.coordinates[1] + ": " + locations[i].loc.coordinates[0])
-    // }
     console.log("locations found: " + locations.length)
-  //  res.json(200, locations);
     res.status(200).json(locations)
   });
- // }// else got miles
 });
 
 

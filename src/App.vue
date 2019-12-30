@@ -59,7 +59,7 @@ export default {
     },
     testGeo: function(){
           var options = {
-          enableHighAccuracy: true,
+            enableHighAccuracy: true,
           timeout: 5000,
           maximumAge: 0
         };
@@ -79,6 +79,10 @@ export default {
 
         navigator.geolocation.getCurrentPosition(success, error, options);
     },
+    async getStripe(){
+            await this.$store.dispatch("getStripeKey");
+
+    }
   //   fetchMeetings(){
   //     var self = this;
   //    // debugger
@@ -112,7 +116,7 @@ export default {
   },
   mounted() {
     console.log("app.vue mounted................")
-    this.$store.dispatch("getAllMeetings")
+    this.$store.dispatch("getAllMeetings");
     this.$store.dispatch("setOptions",{
       picked: "", // default to all meetings
       mileMax: 2,
@@ -123,6 +127,7 @@ export default {
   created: function(){
     
 //debugger
+  //  this.getStripe();
     console.log("app.vue created................")
     //this.fetchMeetings();
     //this.geoLocate();

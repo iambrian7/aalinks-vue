@@ -12,12 +12,12 @@
       <div class="amount-container section" v-if="activetab === 1" >
         <div class="section-content">
             <div class="donate-row">
-              <button v-for="amt in amts" :key="amt" @click="amount = amt, isActive = amt" v-bind:class="{ active: isActive == amt }">${{ amt }}</button>        
-              <input type="text" placeholder="donation amount..." v-model="amount" size="5">
+              <button v-for="amt in amts" :key="amt" @click="requestCharge.amount = amt, isActive = amt" v-bind:class="{ active: isActive == amt }">${{ amt }}</button>        
+              <input type="text" placeholder="donation amount..." v-model="requestCharge.amount" size="5">
             </div>
             <div class="donate-row">
               <div class="donate-view">
-                I wish to donate {{amount | currency}}
+                I wish to donate {{requestCharge.amount | currency}}
               </div>
             </div>
         </div>
@@ -26,140 +26,19 @@
           <button @click="cancel">Cancel</button>
         </div>
       </div>
-      <div class="info-container  section" v-if="activetab === 2" >
+      <div class="info-container  section" v-show="activetab === 2" >
+      <!-- <div class="info-container  section" v-if="activetab === 2" > -->
         <div class="section-content">
-        <p>
-            ( <span class="error-text">*</span> fields are optional)
-        </p>
-            <div class="donate-row">
-                  <FloatingInput v-model="name" pholder="Name"></FloatingInput>
-                  <FloatingInput v-model="email" pholder="Email"></FloatingInput>
-                  <FloatingInput v-model="address.street" pholder="Street"></FloatingInput>
-                  <FloatingInput v-model="address.city" pholder="City"></FloatingInput>
-                  <select  v-model="address.state">
-                    <optgroup>
-                        <option disabled value="">Please select one</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                        <option value="CO">Colorado</option>
-                        <option value="CT">Connecticut</option>
-                        <option value="DE">Delaware</option>
-                        <option value="DC">District Of Columbia</option>
-                        <option value="FL">Florida</option>
-                        <option value="GA">Georgia</option>
-                        <option value="HI">Hawaii</option>
-                        <option value="ID">Idaho</option>
-                        <option value="IL">Illinois</option>
-                        <option value="IN">Indiana</option>
-                        <option value="IA">Iowa</option>
-                        <option value="KS">Kansas</option>
-                        <option value="KY">Kentucky</option>
-                        <option value="LA">Louisiana</option>
-                        <option value="ME">Maine</option>
-                        <option value="MD">Maryland</option>
-                        <option value="MA">Massachusetts</option>
-                        <option value="MI">Michigan</option>
-                        <option value="MN">Minnesota</option>
-                        <option value="MS">Mississippi</option>
-                        <option value="MO">Missouri</option>
-                        <option value="MT">Montana</option>
-                        <option value="NE">Nebraska</option>
-                        <option value="NV">Nevada</option>
-                        <option value="NH">New Hampshire</option>
-                        <option value="NJ">New Jersey</option>
-                        <option value="NM">New Mexico</option>
-                        <option value="NY">New York</option>
-                        <option value="NC">North Carolina</option>
-                        <option value="ND">North Dakota</option>
-                        <option value="OH">Ohio</option>
-                        <option value="OK">Oklahoma</option>
-                        <option value="OR">Oregon</option>
-                        <option value="PA">Pennsylvania</option>
-                        <option value="RI">Rhode Island</option>
-                        <option value="SC">South Carolina</option>
-                        <option value="SD">South Dakota</option>
-                        <option value="TN">Tennessee</option>
-                        <option value="TX">Texas</option>
-                        <option value="UT">Utah</option>
-                        <option value="VT">Vermont</option>
-                        <option value="VA">Virginia</option>
-                        <option value="WA">Washington</option>
-                        <option value="WV">West Virginia</option>
-                        <option value="WI">Wisconsin</option>
-                        <option value="WY">Wyoming</option>
-                    </optgroup>
-                </select>	
-                  <!-- <FloatingInput v-model="address.state" pholder="State (2 char)" width="4"></FloatingInput> -->
-                  <FloatingInput v-model="address.zip" pholder="Zip Code" width="4"></FloatingInput>
-            </div>
-        </div>  <!-- end section-content A track list to auto-fill  Grid By Example 34 -->
-        <div class="section-content">
-          <div class="donate-row">
-            <div class="input-view">
-
-                  <FloatingInput v-model="card.name" pholder="Name on Card"></FloatingInput><span class="req">*</span>
-                  <!-- <div class="error" v-if="cardNumberError">
-                    <p>{{ cardNumberError }}</p>
-                  </div> -->
-            </div>
-                  <FloatingInput v-model="card.number" pholder="Card Number" :err="cardNumberError"></FloatingInput>
-                  <!-- <div class="error" v-if="cardNumberError">
-                    <p>{{ cardNumberError }}</p>
-                  </div> -->
-            <!-- Name on Card: <input type="text" v-model="card.name"> -->
-            <!-- Card Number:  <input type="text" class="input" v-model="card.number"> -->
+          <ReceiptInfo />
+          <div ref="card" id="StripeElement" class="StripeElement" v-if="keydone">
           </div>
-          <!-- <div class="donate-row">
-            <YearDropdown />
-          </div> -->
-          <div class="donate-row">
-              <label class="select-month">Expiry Month
-              <select v-model="card.exp_month" select="select-month" :class="{error: cardMonthError}">
-                  <option value=""></option>
-                  <option value="01">01</option>
-                  <option value="02">02</option>
-                  <option value="03">03</option>
-                  <option value="04">04</option>
-                  <option value="05">05</option>
-                  <option value="06">06</option>
-                  <option value="07">07</option>
-                  <option value="08">08</option>
-                  <option value="09">09</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-              </select>
-              </label>
-                  <!-- <div class="error" v-if="cardMonthError">
-                    <p>{{ cardMonthError }}</p>
-                  </div> -->
-              <!--<input id="ExpiryDate" class="form-control" type="text" placeholder="MM / YY" maxlength="7" name="expMonth" value="01/23"></input>-->
-              <label>Expiry Year
-                <select v-model="card.exp_year" :class="{error: cardYearError}">
-                    <option checked=""></option>
-                    <option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option><option value="2031">2031</option><option value="2032">2032</option>
-                </select>
-              </label>
-                  <!-- <div class="error" v-if="cardYearError">
-                    <p>{{ cardYearError }}</p>
-                  </div> -->
-              <label> CVC
-                <input class="input" type="text" v-model="card.cvc" :class="{error: cardCvcError}">
-              </label>
-                  <!-- <div class="error" v-if="cardCvcError">
-                    <p>{{ cardCvcError }}</p>
-                  </div> -->
-          </div>
+          <h1 v-else>Loading....</h1>
         </div>
         <div class="section-control">
             <button @click="activetab=1">Back</button>
             <button @click="validateCard">Next</button>
             <button @click="cancel">Cancel</button>
         </div>
-
       </div>
       <div class="submit-container section" v-if="activetab === 3" >Submit
           <div class="section-control">
@@ -180,192 +59,357 @@
 import axios from 'axios';
 import FloatingInput from "@/components/FloatingInput";
 import YearDropdown from "@/components/YearDropdown";
+import ReceiptInfo from "@/components/ReceiptInfo";
+import Vue from 'vue'
+// import StripeElement from '@/components/StripeElement'
+let style = {
+  base: {
+    border: '1px solid #D8D8D8',
+    borderRadius: '4px',
+    color: "#000",
+    width: '400px',
+    margin: '20px',
+    padding: '20px',
+    fontSize: '2em'
+  },
+
+  invalid: {
+    // All of the error styles go inside of here.
+  }
+
+};
+let stripe;
+
+function mountElements(key){
+  console.log(`mountElements: key = ${key}`)
+  // this.$store.state.stripeKey)
+  stripe = Stripe(key);
+// // let stripe = Stripe(`pk_test_UWB3Uz5xAWTWkF0BznCORJgb`),
+return stripe.elements();
+// return windows.stripe.elements();
+//     card = undefined;
+} 
+async function getStipeToken(card){
+    let result = await stripe.createToken(card)
+    return result;
+}
+
 export default {
-    components: {
-      FloatingInput,
-      YearDropdown
-    },
-    data(){
-        return {
-         // input_data: "hello",
-            stripeKey: 'pk_test_UWB3Uz5xAWTWkF0BznCORJgb',
-            orderComplete: false,
-            // activetab: 1,
-            // fields
-            stripeToken: null, 
-            name: 'Connor Leech',
-            email: 'connor@employbl.com',
-            amount: '5',
-            engravingText: 'This is the text to put on the bundle of sticks',
-            address: {
-                street: '123 Something Lane',
-                city: 'San Francisco',
-                state: 'CA',
-                zip: '94607'
-            },
+  components: {
+    FloatingInput,
+    YearDropdown,
+    ReceiptInfo,
+    // StripeElement
+  },
+  data(){
+      return {
+          orderComplete: false,
+          // activetab: 1,
+          // fields
+          requestCharge: {
+              name: "",
+              email: "",
+              amount: 5,
+              engravingText: this.engravingText,
+              address: {
+                street: "",
+                city: "",
+                state: "",
+                zip: "",
+              },
+              stripeToken: ""
+          },
+          card: undefined,
+          elements: null,
+          mystripe: null,
+          // card: {
+          //     name: '',
+          //     number: '',
+          //     cvc: '',
+          //     exp_month: '',
+          //     exp_year: ''
+          // },
+          // validation
+          cardNumberError: null,
+          cardCvcError: null,
+          cardMonthError: null,
+          cardYearError: null,
+          cardCheckSending: false,
+          cardCheckError: false,
+          cardCheckErrorMessage: '',
+          cardError: '',
 
-            card: {
-                name: '',
-                number: '',
-                cvc: '',
-                exp_month: '',
-                exp_year: ''
-            },
-            // card: {
-            //     name: '',
-            //     number: '4242424242424242',
-            //     cvc: '123',
-            //     exp_month: '01',
-            //     exp_year: '22'
-            // },
+          amts: [5,10,25,50],
+          isActive: 5
+      }
+  },
+  // initStripe(){
+  //               window.stripe = Stripe('stripe_test_key_here');
+  //               var elements = stripe.elements();
+  //               var style = {
+  //                   base: {
+  //                       // Add your base input styles here. For example:
+  //                       fontSize: '16px',
+  //                       lineHeight: '24px'
+  //                   }
+  //               };
 
-            // validation
-            cardNumberError: null,
-            cardCvcError: null,
-            cardMonthError: null,
-            cardYearError: null,
-            cardCheckSending: false,
-            cardCheckError: false,
-            cardCheckErrorMessage: '',
-            cardError: '',
+  //               // Create an instance of the card Element
+  //               window.card = elements.create('card', {style: style});
 
-            amts: [5,10,25,50],
-            isActive: 5
-        }
-    },
-    methods: {
-      submit(){
-        this.activetab = 4;
-        setTimeout(x => this.activetab = 1, 2000);
-      },
-      cancel(){
-        this.activetab = 1;
-      },
-      validateCard(){
-        var valid = this.validate();
-          if ( valid ){
-            alert(`validation true: ${JSON.stringify(this.card, null, 3)}`);
-            // this.createToken();
-          } else {
-            alert(`validation error: ${JSON.stringify(this.card, null, 3)}`);
+  //               // Add an instance of the card Element into the `card-element` <div>
+  //               window.card.mount('#card-element');
 
+  //           },
+    mounted: function () {
+      // card = elements.create('card');
+      // debugger
+      console.log(`store:stripeKey= ${this.$store.state.stripeKey}`)
+      // let elements = mountElements(`pk_test_UWB3Uz5xAWTWkF0BznCORJgb`)
+      if (this.$store.state.stripeKey){
+        console.log("mounted elements")
+          let elements = mountElements(this.$store.state.stripeKey)
+          if (typeof this.card == "undefined"){
+            this.card = elements.create('card', style);
           }
-      },
-        validate(){
-          console.log(`donate validate...........`)
-            this.clearCardErrors();
-            let valid = true;
-            if(!this.card.number){ valid = false; this.cardNumberError = "Card Number is Required"; }
-            if(!this.card.cvc){ valid = false; this.cardCvcError = "CVC is Required"; }
-            if(!this.card.exp_month){ valid = false; this.cardMonthError = "Month is Required"; }
-            if(!this.card.exp_year){ valid = false; this.cardYearError = "Year is Required"; }
-          return valid;
-        },
-        clearCardErrors(){
-            this.cardNumberError = null;
-            this.cardCvcError = null;
-            this.cardMonthError = null;
-            this.cardYearError = null;
-        },
-       async createToken() {
-          var self = this;
-            this.cardCheckError = false;
-          //  var element = window.Stripe(this.stripeKey);
-            window.Stripe.setPublishableKey(this.stripeKey);
-            this.cardCheckSending = true;
-            Stripe.createToken(this.card,self.stripeResponseHandler);
-        },
-        stripeResponseHandler(status, response) {
-            // token to create a charge on our server 
-            if (response.error) { // Problem!
-                            this.cardError = response.error.message;
-                            console.log('error in getting Stripe token: ' + JSON.stringify(response.error, null, 4))
-            //
-            //    // Show the errors on the form:
-            //    $form.find('.payment-errors').text(response.error.message);
-            //    $form.find('.submit').prop('disabled', false); // Re-enable submission
-            //
-            } else { // Token was created!
-                this.stripeToken = response.id;
-                console.log('received Stripe token: ' + JSON.stringify(response, null, 4))
-                this.cardError = null;
-            }
-
-            var request = {
-                name: this.name ? this.name : "anonymous",
-                email: this.email,
-                amount: this.amount,
-                engravingText: this.engravingText,
-                address: this.address,
-                card: this.card,
-                stripeToken: this.stripeToken
-            };
-
-                // Send to our server
-         //   var url = 'http://localhost:3970/api/charge'
-            var url = 'http://localhost:8086/charge'
-
-                // var url = 'https://moonstrider.com/api/charge'
-                // axios.post('url', data, {
-                //         headers: {
-                //             'Content-Type': 'application/json',
-                //         }
-                //     }
-                //     )
-                console.log(`posting request=${JSON.stringify(request, null, 3)}`)
-                axios.post(url,request, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*', 
-                        }
-                })
-                // axios.post(`${window.endpoint}/charge`, request)
-                    .then((res) => {
-                        var error = res.data.error;
-                        var charged = res.data.charged;
-                        if (error){
-                            console.error(error);
-                        } else {
-                            console.log(`Order Complete: ${JSON.stringify(charged, null,3)}`)
-                            this.orderComplete = true;
-                            // this.$router.push({ path: `order-complete/${charged.id}` })
-                        }
-                    });
-            }
+          this.card.mount(this.$refs.card);
+      }
+  },
+  methods: {
+    renderCard(key){
+      console.log(`renderCard: `)
+         this.elements = mountElements(key)
+          if (typeof this.card == "undefined"){
+            this.card = this.elements.create('card', style);
+          }
+          if (this.$refs.card){
+            this.card.mount(this.$refs.card);
+          }
     },
-     filters: {
-       money: function(value){
-         return '$'+value;
-       },
-        currency: function(value){
-        if (!value) return 0;
-        value = (value*1).toFixed(0)
-        return (value * 1).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+     purchase: function () {
+      stripe.createToken(card).then(function(result) {
+        if (result.error) {
+          self.hasCardErrors = true;
+          self.$forceUpdate(); // Forcing the DOM to update so the Stripe Element can update.
+          return;
+        }
+        // Access the token with result.token
+        alert(`stripe token  created ${result.token}`)
+      });
+     },
+    submit(){
+      this.activetab = 4;
+      setTimeout(x => this.activetab = 1, 2000);
+    },
+    cancel(){
+      this.activetab = 1;
+      this.resetCharge();
+      this.clearCardErrors();
+    },
+    validateCard(){
+          this.createToken();
+      // var valid = this.validate();
+      //   if ( valid ){
+      //     alert(`validation true: ${JSON.stringify(this.card, null, 3)}`);
+      //     this.createToken();
+      //   } else {
+      //     alert(`validation error: ${JSON.stringify(this.card, null, 3)}`);
+
+      //   }
+    },
+      validate(){
+        console.log(`donate validate...........`)
+          this.clearCardErrors();
+          let valid = true;
+          if(!this.card.number){ valid = false; this.cardNumberError = "Card Number is Required"; }
+          if(!this.card.cvc){ valid = false; this.cardCvcError = "CVC is Required"; }
+          if(!this.card.exp_month){ valid = false; this.cardMonthError = "Month is Required"; }
+          if(!this.card.exp_year){ valid = false; this.cardYearError = "Year is Required"; }
+        return valid;
       },
-        capitalize: function (value) {
-          if (!value) return ''
-          value = value.toString()
-          return value.charAt(0).toUpperCase() + value.slice(1)
-        },
-        dayname: function(value){
-          var daysIndex = ['Sun','Mon', 'Tue','Wed','Thu', 'Fri', 'Sat'];
-          return daysIndex[+value]
+      resetCharge(){
+        this.requestCharge.name = this.requestCharge.email = this.requestCharge.address.street = this.requestCharge.address.city = this.requestCharge.address.state =
+        this.requestCharge.address.zip = '';
+        this.requestCharge.stripeToken = null;
+         // Clear each Element.
+        // this.elements._elements.forEach(function(element) {
+        //   element.clear();
+        // });
+        this.$forceUpdate();
+      },
+      clearCardErrors(){
+          this.cardNumberError = null;
+          this.cardCvcError = null;
+          this.cardMonthError = null;
+          this.cardYearError = null;
+      },
+      async createToken() {
+        var self = this;
+          this.cardCheckError = false;
+        //  var element = window.Stripe(this.stripeKey);
+        const result = getStipeToken(this.card)
+      //   stripe.createToken(card).then(function(result) {
+          if (result.error) {
+            self.hasCardErrors = true;
+            self.$forceUpdate(); // Forcing the DOM to update so the Stripe Element can update.
+            self.cardError = result.error.message;
+            console.log('error in getting Stripe token: ' + JSON.stringify(result.error, null, 4))
+          } else { // Token was created!
+            this.requestCharge.stripeToken = result.id;
+            console.log('received Stripe token: ' + JSON.stringify(result, null, 4))
+            this.cardError = null;
+            this.chargeit(this.requestCharge);
+          }
+
+
+          // Access the token with result.token
+          // alert(`stripe token  created ${result.token}`)
+     //   });
+
+
+          // window.Stripe.setPublishableKey(this.$store.state.stripeKey);
+          // // window.Stripe.setPublishableKey(this.stripeKey);
+          // this.cardCheckSending = true;
+          // Stripe.createToken(this.card,self.stripeResponseHandler);
+      },
+      async chargeit(request){
+          // Send to our server
+          var url = 'http://localhost:8086/charge'
+          console.log(`posting request=${JSON.stringify(request, null, 3)}`)
+          // comment out for testing
+          // comment out for testing
+          // comment out for testing
+          // comment out for testing
+          // var res = await axios.post(url,this.requestCharge, {
+            //     headers: {
+              //         'Content-Type': 'application/json',
+          //             'Access-Control-Allow-Origin': '*', 
+          //         }
+          // })
+          // comment out for testing
+          // comment out for testing
+          // comment out for testing
+          // comment out for testing
+          var res1 = {
+            data: {
+              charged: {
+                amount: 30
+              }
+            }
+          }
+          // comment out for testing
+          // comment out for testing
+          // comment out for testing
+          if (res1.error){
+            console.error(error);
+        } else {
+          var charged = res1.data.charged;
+          console.log(`Order Complete: ${JSON.stringify(charged, null,3)}`)
+          this.orderComplete = true;
+          // this.$router.push({ path: `order-complete/${charged.id}` })
+          //todo  reset form
+          this.activetab = 4;
+          setTimeout(x => this.activetab = 1, 2000);
+          this.resetCharge();
+          this.$router.push('thankyou')
         }
       },
-    computed: {
-  	activetab: {
-    	get: function() {
-    		return this.$store.state.activetab;
+      stripeResponseHandler(status, response) {
+          // token to create a charge on our server 
+          if (response.error) { // Problem!
+                          this.cardError = response.error.message;
+                          console.log('error in getting Stripe token: ' + JSON.stringify(response.error, null, 4))
+          } else { // Token was created!
+              this.requestCharge.stripeToken = response.id;
+              console.log('received Stripe token: ' + JSON.stringify(response, null, 4))
+              this.cardError = null;
+              this.chargeit(this.requestCharge);
+          }
+
+          // var request = {
+          //     name: this.name ? this.name : "anonymous",
+          //     email: this.email,
+          //     amount: this.amount,
+          //     engravingText: this.engravingText,
+          //     address: this.address,
+          //     card: this.card,
+          //     stripeToken: this.stripeToken
+          // };
+
+          //     // Send to our server
+          // var url = 'http://localhost:8086/charge'
+          //     console.log(`posting request=${JSON.stringify(request, null, 3)}`)
+          //     axios.post(url,request, {
+          //         headers: {
+          //             'Content-Type': 'application/json',
+          //                 'Access-Control-Allow-Origin': '*', 
+          //             }
+          //     })
+          //         .then((res) => {
+          //             var error = res.data.error;
+          //             var charged = res.data.charged;
+          //             if (error){
+          //                 console.error(error);
+          //             } else {
+          //                 console.log(`Order Complete: ${JSON.stringify(charged, null,3)}`)
+          //                 this.orderComplete = true;
+          //                 // this.$router.push({ path: `order-complete/${charged.id}` })
+          //             }
+          //         });
+          }
+  },
+    filters: {
+      money: function(value){
+        return '$'+value;
+      },
+      currency: function(value){
+      if (!value) return 0;
+      value = (value*1).toFixed(0)
+      return (value * 1).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+    },
+      capitalize: function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      },
+      dayname: function(value){
+        var daysIndex = ['Sun','Mon', 'Tue','Wed','Thu', 'Fri', 'Sat'];
+        return daysIndex[+value]
+      }
+    },
+  computed: {
+    keydone: function(){
+      var key = this.$store.state.stripeKey;
+      if (key){
+        console.log('keydone is true')
+        var self = this;
+        Vue.nextTick()
+          .then(function () {
+              // this function is called when vue has re-rendered the component.
+          self.renderCard(key);
+        })
+        // Vue.nextTick(function () {
+        //   // DOM updated
+        // })
+        return true;
+      } else {
+        console.log('keydone is false')
+        return false;
+      }
+    },
+    activetab: {
+      get: function() {
+        return this.$store.state.activetab;
       },
       set: function(newValue) {
-       this.$store.state.activetab = newValue;
+        this.$store.state.activetab = newValue;
       }
     }
-    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
 .donate2  {
   max-width: 80vw;
   margin: 20px auto;
@@ -385,13 +429,16 @@ export default {
 .flex-columns{
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .section{
   flex: 1 1 400px;
   border: 1px solid black;
   /* font-size: 1.8em; */
-  background: rgba(138, 136, 136, 0.925);
-  height: 76vh;
+  background: rgba(236, 229, 229, 0.925);
+  /* height: 76vh; */
+  max-width: 500px;
+  padding: 20px;
 }
 .section-content{
   display: flex;
@@ -463,14 +510,13 @@ h2 { text-decoration: underline; }
   box-shadow: 5px;
   max-width: 400px;
 }
-select,
+/* select,
 optgroup,
 .input {
-    /* font-size: 1.8rem; */
     padding: 5px;
     display: block;
     margin: 0 0 10px 0;
-}
+} */
 /* optgroup{
   margin: 0;
   padding: 0;
@@ -524,4 +570,52 @@ select {
 }
 .error-text{color: red;}
 .req{ color: red;}
+
+/* stripe card  */
+ .stripe-element{
+      width: 90vw;
+
+    }
+    .StripeElement {
+      box-sizing: border-box;
+
+      /* height: 140px;
+      width: 400px; */
+      margin-top: 20px;
+      font-size: 2em;
+
+      padding: 10px 12px;
+
+      border: 1px solid black;
+      border-radius: 4px;
+      background-color: white;
+
+      box-shadow: 0 1px 3px 0 #e6ebf1;
+      -webkit-transition: box-shadow 150ms ease;
+      transition: box-shadow 150ms ease;
+    }
+
+    .StripeElement--focus {
+      box-shadow: 0 1px 3px 0 #cfd7df;
+    }
+
+    .StripeElement--invalid {
+      border-color: #fa755a;
+    }
+
+    .StripeElement--webkit-autofill {
+      background-color: #fefde5 !important;
+    }
+    @media screen and (max-width: 468px) { /* Specific to this particular image */
+     .donate2  {
+        max-width: 100vw;
+        margin: 5px 5px;
+      }
+      .section{
+        background: rgba(236, 108, 108, 0.925);
+        /* height: 76vh; */
+        max-width: 100%;
+        padding: 3px;
+      }
+    }
 </style>

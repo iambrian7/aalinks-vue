@@ -25,14 +25,26 @@ import store from './store/store'
 
 Vue.config.productionTip = false
 
-
-
-export const Bus = new Vue() // This empty Vue model will serve as our event bus.
+// export const Bus = new Vue() // This empty Vue model will serve as our event bus.
 /* eslint-disable no-new */
+// new Vue({
+//   router,
+//   store,
+//   render: (h) => h("frame", [h(App)]),
+//   created() {
+//     this.$store.dispatch("getStripeKey");
+//   },
+// }).$start();
+
 var vm = new Vue({
   el: '#app',
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  async created() {
+    console.log("before dispatch getStripeKey");
+    await this.$store.dispatch("getStripeKey");
+    console.log("after dispatch getStripeKey");
+  },
 })
